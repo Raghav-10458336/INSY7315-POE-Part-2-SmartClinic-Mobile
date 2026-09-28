@@ -264,6 +264,11 @@
 
                     </VerticalStackLayout>
 
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnAppointmentsTapped" />
+                    </Border.GestureRecognizers>
+
                 </Border>
 
                 <!-- Check-in -->

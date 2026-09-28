@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.AppointmentsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
+    Title="Appointments"
+    BackgroundColor="#F5F8FA">
+
+    <Grid
+        Padding="24,24,24,30"
+        RowDefinitions="Auto,Auto,Auto,*">
+
+        <!-- Page heading -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Spacing="5">
+
+            <Label
+                Text="My Appointments"
+                FontSize="26"
+                FontAttributes="Bold"
+                TextColor="#172B4D" />
+
+            <Label
+                Text="View and manage your clinic appointments."
+                FontSize="14"
+                TextColor="#6B778C" />
+
+        </VerticalStackLayout>
+
+        <!-- Book appointment action -->
+        <Button
+            Grid.Row="1"
+            Text="+  Book Appointment"
+            Margin="0,22,0,0"
+            HeightRequest="50"
+            CornerRadius="10"
+            BackgroundColor="#1565C0"
+            TextColor="White"
+            FontSize="15"
+            FontAttributes="Bold"
+            AutomationProperties.Name="Book appointment" />
+
+        <!-- Loading and error feedback -->
+        <VerticalStackLayout
+            Grid.Row="2"
+            Margin="0,18,0,0"
+            Spacing="12">
+
+            <HorizontalStackLayout
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    Color="#1565C0"
+                    WidthRequest="22"
+                    HeightRequest="22" />
+
+                <Label
+                    Text="Loading appointments..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <Border
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Appointments error message" />
+
+            </Border>
+
+        </VerticalStackLayout>
+
+        <!-- Appointment content -->
+        <Grid
+            Grid.Row="3"
+            Margin="0,20,0,0">
+
+            <!-- Empty state -->
+            <Border
+                Padding="24"
+                VerticalOptions="Start"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasNoAppointments}">
+
+                <VerticalStackLayout
+                    Spacing="10"
+                    HorizontalOptions="Center">
+
+                    <Label
+                        Text="📅"
+                        FontSize="34"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="No appointments yet"
+                        FontSize="17"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Your booked appointments will appear here."
+                        FontSize="13"
+                        TextColor="#6B778C"
+                        HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Appointment list -->
+            <CollectionView
+                ItemsSource="{Binding Appointments}"
+                IsVisible="{Binding HasAppointments}"
+                SelectionMode="None">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Vertical"
+                        ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Appointment">
+
+                        <Border
+                            Padding="18"
+                            BackgroundColor="White"
+                            Stroke="#D9E2EC"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14">
+
+                            <VerticalStackLayout Spacing="10">
+
+                                <!-- Doctor -->
+                                <Grid
+                                    ColumnDefinitions="*,Auto"
+                                    ColumnSpacing="12">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="3">
+
+                                        <Label
+                                            Text="{Binding DoctorName}"
+                                            FontSize="17"
+                                            FontAttributes="Bold"
+                                            TextColor="#172B4D" />
+
+                                        <Label
+                                            Text="{Binding DoctorSpecialisation}"
+                                            FontSize="13"
+                                            TextColor="#1565C0" />
+
+                                    </VerticalStackLayout>
+
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="9,5"
+                                        VerticalOptions="Start"
+                                        BackgroundColor="#E3F2FD"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 8">
+
+                                        <Label
+                                            Text="{Binding Status}"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#1565C0" />
+
+                                    </Border>
+
+                                </Grid>
+
+                                <!-- Appointment date and time -->
+                                <Grid
+                                    Margin="0,5,0,0"
+                                    ColumnDefinitions="*,*"
+                                    ColumnSpacing="12">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="Date"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#6B778C" />
+
+                                        <Label
+                                            Text="{Binding AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
+                                            FontSize="14"
+                                            TextColor="#172B4D" />
+
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="Time"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#6B778C" />
+
+                                        <Label
+                                            Text="{Binding AppointmentDateTime, StringFormat='{0:HH:mm}'}"
+                                            FontSize="14"
+                                            TextColor="#172B4D" />
+
+                                    </VerticalStackLayout>
+
+                                </Grid>
+
+                                <!-- Reason for visit -->
+                                <VerticalStackLayout
+                                    Spacing="3"
+                                    IsVisible="{Binding ReasonForVisit}">
+
+                                    <Label
+                                        Text="Reason for visit"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        TextColor="#6B778C" />
+
+                                    <Label
+                                        Text="{Binding ReasonForVisit}"
+                                        FontSize="13"
+                                        TextColor="#172B4D"
+                                        LineBreakMode="WordWrap" />
+
+                                </VerticalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

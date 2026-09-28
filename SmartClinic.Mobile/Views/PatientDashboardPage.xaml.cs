@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using SmartClinic.Mobile.ViewModels;
 
 namespace SmartClinic.Mobile.Views;
@@ -19,7 +20,19 @@ public partial class PatientDashboardPage : ContentPage
     {
         base.OnAppearing();
 
-        // Refresh the patient's information whenever the dashboard appears.
+        // Refresh dashboard information whenever the page appears.
         await _viewModel.LoadDashboardAsync();
+    }
+
+    private async void OnAppointmentsTapped(object? sender, TappedEventArgs e)
+    {
+        // Resolve the appointments page through dependency injection.
+        var appointmentsPage = Handler?.MauiContext?.Services
+            .GetService<AppointmentsPage>();
+
+        if (appointmentsPage is not null)
+        {
+            await Navigation.PushAsync(appointmentsPage);
+        }
     }
 }
