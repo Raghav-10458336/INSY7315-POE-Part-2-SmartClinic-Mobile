@@ -101,12 +101,95 @@
                 FontAttributes="Bold"
                 TextColor="#172B4D" />
 
+            <!-- Displayed when the patient has an upcoming appointment -->
             <Border
                 Padding="18"
                 BackgroundColor="White"
                 Stroke="#D9E2EC"
                 StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasUpcomingAppointment}">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="{Binding UpcomingAppointment.DoctorName}"
+                        FontSize="17"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="{Binding UpcomingAppointment.DoctorSpecialisation}"
+                        FontSize="13"
+                        TextColor="#1565C0" />
+
+                    <Grid
+                        Margin="0,6,0,0"
+                        ColumnDefinitions="Auto,*"
+                        RowDefinitions="Auto,Auto"
+                        ColumnSpacing="10"
+                        RowSpacing="6">
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Date"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            TextColor="#6B778C" />
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding UpcomingAppointment.AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
+                            FontSize="13"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Time"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            TextColor="#6B778C" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding UpcomingAppointment.AppointmentDateTime, StringFormat='{0:HH:mm}'}"
+                            FontSize="13"
+                            TextColor="#172B4D" />
+
+                    </Grid>
+
+                    <Border
+                        Margin="0,6,0,0"
+                        Padding="10,6"
+                        HorizontalOptions="Start"
+                        BackgroundColor="#E3F2FD"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8">
+
+                        <Label
+                            Text="{Binding UpcomingAppointment.Status}"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#1565C0" />
+
+                    </Border>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Displayed when no future appointment exists -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasNoUpcomingAppointment}">
 
                 <VerticalStackLayout Spacing="10">
 
@@ -130,7 +213,6 @@
                         BackgroundColor="#1565C0"
                         TextColor="White"
                         FontAttributes="Bold"
-                        HorizontalOptions="Fill"
                         AutomationProperties.Name="Book appointment" />
 
                 </VerticalStackLayout>

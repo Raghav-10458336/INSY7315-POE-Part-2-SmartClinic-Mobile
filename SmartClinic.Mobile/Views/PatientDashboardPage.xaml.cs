@@ -20,6 +20,6 @@ public partial class PatientDashboardPage : ContentPage
         base.OnAppearing();
 
         // Refresh the patient's information whenever the dashboard appears.
-        await _viewModel.LoadPatientAsync();
+        await _viewModel.LoadDashboardAsync();
     }
 }

@@ -13,4 +13,8 @@ public static class ApiConstants
     // Patient profile endpoints.
     public const string CurrentPatientEndpoint = "/api/patients/me";
     public const string UpdatePatientEndpoint = "/api/patients/me";
+
+    // Appointment endpoints for the authenticated patient.
+    public const string AppointmentsEndpoint = "/api/appointments";
+    public const string UpcomingAppointmentEndpoint = "/api/appointments/upcoming";
 }

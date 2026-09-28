@@ -37,6 +37,8 @@ namespace SmartClinic.Mobile
             // Register patient services used for authenticated profile operations.
             builder.Services.AddSingleton<IPatientService, PatientService>();
 
+            builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
+
             // Register authentication ViewModels used by the mobile interface.
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
