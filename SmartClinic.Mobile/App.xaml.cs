@@ -20,7 +20,8 @@ namespace SmartClinic.Mobile
         {
             var loginPage = _serviceProvider.GetRequiredService<LoginPage>();
 
-            return new Window(loginPage);
+            // Use a navigation container for the authentication screens.
+            return new Window(new NavigationPage(loginPage));
         }
     }
 }

@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    Title="Create Account"
+    BackgroundColor="#F5F8FA"
+    Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="28,45,28,40"
+            Spacing="0">
+
+            <!-- Page heading -->
+            <Label
+                Text="Create your account"
+                FontSize="28"
+                FontAttributes="Bold"
+                TextColor="#172B4D" />
+
+            <Label
+                Text="Register for secure access to your appointments and healthcare information."
+                Margin="0,8,0,28"
+                FontSize="14"
+                TextColor="#6B778C"
+                LineHeight="1.25" />
+
+            <!-- First name -->
+            <Label
+                Text="First name"
+                Margin="0,0,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Entry
+                    Text="{Binding FirstName}"
+                    Placeholder="Enter your first name"
+                    ReturnType="Next"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    PlaceholderColor="#8993A4"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="First name" />
+            </Border>
+
+            <!-- Last name -->
+            <Label
+                Text="Last name"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Entry
+                    Text="{Binding LastName}"
+                    Placeholder="Enter your last name"
+                    ReturnType="Next"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    PlaceholderColor="#8993A4"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Last name" />
+            </Border>
+
+            <!-- Email -->
+            <Label
+                Text="Email address"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Entry
+                    Text="{Binding Email}"
+                    Placeholder="Enter your email address"
+                    Keyboard="Email"
+                    ReturnType="Next"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    PlaceholderColor="#8993A4"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Email address" />
+            </Border>
+
+            <!-- Phone number -->
+            <Label
+                Text="Phone number"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Entry
+                    Text="{Binding PhoneNumber}"
+                    Placeholder="Enter your phone number"
+                    Keyboard="Telephone"
+                    ReturnType="Next"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    PlaceholderColor="#8993A4"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Phone number" />
+            </Border>
+
+            <!-- Date of birth -->
+            <Label
+                Text="Date of birth"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <DatePicker
+                    Date="{Binding DateOfBirth}"
+                    MaximumDate="{x:Static sys:DateTime.Today}"
+                    Format="dd MMMM yyyy"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Date of birth" />
+            </Border>
+
+            <!-- Gender -->
+            <Label
+                Text="Gender"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Picker
+                    Title="Select gender"
+                    SelectedItem="{Binding Gender}"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Gender">
+
+                    <Picker.Items>
+                        <x:String>Male</x:String>
+                        <x:String>Female</x:String>
+                        <x:String>Other</x:String>
+                        <x:String>Prefer not to say</x:String>
+                    </Picker.Items>
+                </Picker>
+            </Border>
+
+            <!-- Password -->
+            <Label
+                Text="Password"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Entry
+                    Text="{Binding Password}"
+                    Placeholder="Minimum 8 characters"
+                    IsPassword="True"
+                    ReturnType="Next"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    PlaceholderColor="#8993A4"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Password" />
+            </Border>
+
+            <!-- Password confirmation -->
+            <Label
+                Text="Confirm password"
+                Margin="0,18,0,7"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#344563" />
+
+            <Border
+                Padding="14,4"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Entry
+                    Text="{Binding ConfirmPassword}"
+                    Placeholder="Enter your password again"
+                    IsPassword="True"
+                    ReturnType="Done"
+                    FontSize="15"
+                    TextColor="#172B4D"
+                    PlaceholderColor="#8993A4"
+                    MinimumHeightRequest="48"
+                    AutomationProperties.Name="Confirm password" />
+            </Border>
+
+            <!-- Validation and API errors -->
+            <Border
+                Margin="0,18,0,0"
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Registration error message" />
+            </Border>
+
+            <!-- Successful registration feedback -->
+            <Border
+                Margin="0,18,0,0"
+                Padding="12"
+                BackgroundColor="#E8F5E9"
+                Stroke="#C8E6C9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasSuccess}">
+
+                <Label
+                    Text="{Binding SuccessMessage}"
+                    FontSize="13"
+                    TextColor="#1B5E20"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Registration success message" />
+            </Border>
+
+            <!-- Registration action -->
+            <Button
+                Text="Create Account"
+                Margin="0,24,0,0"
+                HeightRequest="52"
+                CornerRadius="10"
+                BackgroundColor="#1565C0"
+                TextColor="White"
+                FontSize="16"
+                FontAttributes="Bold"
+                Command="{Binding RegisterCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                AutomationProperties.Name="Create account" />
+
+            <!-- Loading feedback -->
+            <HorizontalStackLayout
+                Margin="0,16,0,0"
+                Spacing="10"
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    Color="#1565C0"
+                    WidthRequest="22"
+                    HeightRequest="22" />
+
+                <Label
+                    Text="Creating your account..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
+
+            <!-- Login navigation will be connected next -->
+            <HorizontalStackLayout
+                Margin="0,28,0,0"
+                Spacing="4"
+                HorizontalOptions="Center">
+
+                <Label
+                    Text="Already have an account?"
+                    FontSize="14"
+                    TextColor="#6B778C" />
+
+                <Label
+                 Text="Sign in"
+                 FontSize="14"
+                 FontAttributes="Bold"
+                 TextColor="#1565C0"
+                 AutomationProperties.Name="Sign in">
+
+                <Label.GestureRecognizers>
+                <TapGestureRecognizer
+                 Tapped="OnSignInTapped" />
+                    </Label.GestureRecognizers>
+
+                </Label>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

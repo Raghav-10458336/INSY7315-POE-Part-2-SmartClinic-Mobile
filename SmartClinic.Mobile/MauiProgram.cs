@@ -36,9 +36,11 @@ namespace SmartClinic.Mobile
 
             // Register authentication ViewModels used by the mobile interface.
             builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<RegisterViewModel>();
 
             // Register authentication pages for dependency injection.
             builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterPage>();
 
 
             return builder.Build();
