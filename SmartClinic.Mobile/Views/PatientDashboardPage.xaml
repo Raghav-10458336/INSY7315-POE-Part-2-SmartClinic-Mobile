@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.PatientDashboardPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Home"
+    BackgroundColor="#F5F8FA"
+    Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="24,36,24,40"
+            Spacing="0">
+
+            <!-- Dashboard header -->
+            <Grid
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="16">
+
+                <VerticalStackLayout
+                    Grid.Column="0"
+                    Spacing="4">
+
+                    <Label
+                        Text="{Binding WelcomeMessage}"
+                        FontSize="27"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="Here's what's happening with your healthcare."
+                        FontSize="14"
+                        TextColor="#6B778C" />
+
+                </VerticalStackLayout>
+
+                <Border
+                    Grid.Column="1"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    BackgroundColor="#E3F2FD"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 14">
+
+                    <Label
+                        Text="👤"
+                        FontSize="23"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        AutomationProperties.Name="Patient profile" />
+
+                </Border>
+
+            </Grid>
+
+            <!-- Loading feedback -->
+            <HorizontalStackLayout
+                Margin="0,24,0,0"
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    Color="#1565C0"
+                    WidthRequest="22"
+                    HeightRequest="22" />
+
+                <Label
+                    Text="Loading your information..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <!-- Error feedback -->
+            <Border
+                Margin="0,20,0,0"
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Dashboard error message" />
+
+            </Border>
+
+            <!-- Upcoming appointment -->
+            <Label
+                Text="Upcoming appointment"
+                Margin="0,32,0,12"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="#172B4D" />
+
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="No upcoming appointment"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="Book an appointment with one of our available doctors."
+                        FontSize="13"
+                        TextColor="#6B778C"
+                        LineHeight="1.2" />
+
+                    <Button
+                        Text="Book Appointment"
+                        Margin="0,8,0,0"
+                        HeightRequest="46"
+                        CornerRadius="9"
+                        BackgroundColor="#1565C0"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Fill"
+                        AutomationProperties.Name="Book appointment" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Quick actions -->
+            <Label
+                Text="Quick actions"
+                Margin="0,30,0,12"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="#172B4D" />
+
+            <Grid
+                ColumnDefinitions="*,*"
+                RowDefinitions="Auto,Auto"
+                ColumnSpacing="12"
+                RowSpacing="12">
+
+                <!-- Appointments -->
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Padding="16"
+                    MinimumHeightRequest="125"
+                    BackgroundColor="White"
+                    Stroke="#D9E2EC"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14">
+
+                    <VerticalStackLayout Spacing="8">
+
+                        <Label
+                            Text="📅"
+                            FontSize="25"
+                            AutomationProperties.Name="Appointments" />
+
+                        <Label
+                            Text="Appointments"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="View and manage"
+                            FontSize="12"
+                            TextColor="#6B778C" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+                <!-- Check-in -->
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Padding="16"
+                    MinimumHeightRequest="125"
+                    BackgroundColor="White"
+                    Stroke="#D9E2EC"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14">
+
+                    <VerticalStackLayout Spacing="8">
+
+                        <Label
+                            Text="✓"
+                            FontSize="27"
+                            FontAttributes="Bold"
+                            TextColor="#1565C0"
+                            AutomationProperties.Name="Check in" />
+
+                        <Label
+                            Text="Check In"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="Join the clinic queue"
+                            FontSize="12"
+                            TextColor="#6B778C" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+                <!-- Prescriptions -->
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Padding="16"
+                    MinimumHeightRequest="125"
+                    BackgroundColor="White"
+                    Stroke="#D9E2EC"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14">
+
+                    <VerticalStackLayout Spacing="8">
+
+                        <Label
+                            Text="Rx"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="#1565C0"
+                            AutomationProperties.Name="Prescriptions" />
+
+                        <Label
+                            Text="Prescriptions"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="View your medication"
+                            FontSize="12"
+                            TextColor="#6B778C" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+                <!-- Consultation history -->
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="16"
+                    MinimumHeightRequest="125"
+                    BackgroundColor="White"
+                    Stroke="#D9E2EC"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14">
+
+                    <VerticalStackLayout Spacing="8">
+
+                        <Label
+                            Text="📋"
+                            FontSize="24"
+                            AutomationProperties.Name="Consultation history" />
+
+                        <Label
+                            Text="History"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="Past consultations"
+                            FontSize="12"
+                            TextColor="#6B778C" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+            </Grid>
+
+            <!-- Queue status -->
+            <Label
+                Text="Clinic status"
+                Margin="0,30,0,12"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="#172B4D" />
+
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <Grid
+                    ColumnDefinitions="Auto,*"
+                    ColumnSpacing="14">
+
+                    <Border
+                        WidthRequest="42"
+                        HeightRequest="42"
+                        BackgroundColor="#E8F5E9"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12">
+
+                        <Label
+                            Text="✓"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            TextColor="#2E7D32"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center" />
+
+                    </Border>
+
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="3"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Text="Not checked in"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="Your queue information will appear here after check-in."
+                            FontSize="12"
+                            TextColor="#6B778C"
+                            LineBreakMode="WordWrap" />
+
+                    </VerticalStackLayout>
+
+                </Grid>
+
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
