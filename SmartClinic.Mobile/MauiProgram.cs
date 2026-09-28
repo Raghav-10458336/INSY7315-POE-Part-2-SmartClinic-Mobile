@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartClinic.Mobile.Constants;
 using SmartClinic.Mobile.Services;
+using SmartClinic.Mobile.ViewModels;
+using SmartClinic.Mobile.Views;
 
 namespace SmartClinic.Mobile
 {
@@ -31,6 +33,12 @@ namespace SmartClinic.Mobile
 
             // Register authentication services for dependency injection.
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+
+            // Register authentication ViewModels used by the mobile interface.
+            builder.Services.AddTransient<LoginViewModel>();
+
+            // Register authentication pages for dependency injection.
+            builder.Services.AddTransient<LoginPage>();
 
 
             return builder.Build();
