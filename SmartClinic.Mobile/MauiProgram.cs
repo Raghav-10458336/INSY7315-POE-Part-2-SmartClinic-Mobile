@@ -38,18 +38,21 @@ namespace SmartClinic.Mobile
             builder.Services.AddSingleton<IPatientService, PatientService>();
 
             builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
+            builder.Services.AddSingleton<IDoctorService, DoctorService>();
 
             // Register authentication ViewModels used by the mobile interface.
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<PatientDashboardViewModel>();
             builder.Services.AddTransient<AppointmentsViewModel>();
+            builder.Services.AddTransient<BookAppointmentViewModel>();
 
             // Register authentication pages for dependency injection.
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<PatientDashboardPage>();
             builder.Services.AddTransient<AppointmentsPage>();
+            builder.Services.AddTransient<BookAppointmentPage>();
 
 
             return builder.Build();

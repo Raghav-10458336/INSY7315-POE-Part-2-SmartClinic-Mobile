@@ -35,4 +35,16 @@ public partial class PatientDashboardPage : ContentPage
             await Navigation.PushAsync(appointmentsPage);
         }
     }
+
+    private async void OnBookAppointmentClicked(object? sender, EventArgs e)
+    {
+        // Resolve the booking page through dependency injection.
+        var bookingPage = Handler?.MauiContext?.Services
+            .GetService<BookAppointmentPage>();
+
+        if (bookingPage is not null)
+        {
+            await Navigation.PushAsync(bookingPage);
+        }
+    }
 }

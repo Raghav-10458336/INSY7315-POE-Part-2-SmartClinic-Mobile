@@ -213,7 +213,8 @@
                         BackgroundColor="#1565C0"
                         TextColor="White"
                         FontAttributes="Bold"
-                        AutomationProperties.Name="Book appointment" />
+                        AutomationProperties.Name="Book appointment"
+                        Clicked="OnBookAppointmentClicked" />
 
                 </VerticalStackLayout>
 
