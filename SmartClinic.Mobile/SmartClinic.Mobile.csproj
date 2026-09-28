@@ -72,11 +72,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Constants\" />
 	  <Folder Include="Converters\" />
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Views\" />
-	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>
