@@ -99,7 +99,7 @@
                 BackgroundColor="#E3F2FD"
                 StrokeThickness="0"
                 StrokeShape="RoundRectangle 12"
-                IsVisible="{Binding SelectedDoctor}">
+                IsVisible="{Binding HasSelectedDoctor}">
 
                 <VerticalStackLayout Spacing="4">
 
@@ -239,6 +239,24 @@
 
             </Border>
 
+            <!-- Successful booking feedback -->
+            <Border
+                Margin="0,20,0,0"
+                Padding="12"
+                BackgroundColor="#E8F5E9"
+                Stroke="#C8E6C9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasSuccess}">
+
+                <Label
+                    Text="{Binding SuccessMessage}"
+                    FontSize="13"
+                    TextColor="#2E7D32"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
             <!-- Booking action -->
             <Button
                 Text="Confirm Appointment"
@@ -250,6 +268,7 @@
                 FontSize="15"
                 FontAttributes="Bold"
                 IsEnabled="{Binding IsNotBusy}"
+                Command="{Binding CreateAppointmentCommand}"
                 AutomationProperties.Name="Confirm appointment" />
 
             <Label

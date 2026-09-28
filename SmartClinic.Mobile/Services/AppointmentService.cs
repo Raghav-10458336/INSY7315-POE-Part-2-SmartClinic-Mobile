@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using SmartClinic.Mobile.Constants;
+﻿using SmartClinic.Mobile.Constants;
+using SmartClinic.Mobile.DTOs;
 using SmartClinic.Mobile.Models;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+
 
 namespace SmartClinic.Mobile.Services;
 
@@ -51,6 +53,35 @@ public class AppointmentService : IAppointmentService
 
             var response = await _httpClient.GetAsync(
                 ApiConstants.UpcomingAppointmentEndpoint);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<Appointment>();
+        }
+        catch (HttpRequestException)
+        {
+            return null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public async Task<Appointment?> CreateAppointmentAsync(
+    CreateAppointmentRequest request)
+    {
+        try
+        {
+            await AddAuthenticationHeaderAsync();
+
+            // Submit the selected doctor, appointment time and visit reason.
+            var response = await _httpClient.PostAsJsonAsync(
+                ApiConstants.AppointmentsEndpoint,
+                request);
 
             if (!response.IsSuccessStatusCode)
             {
