@@ -9,4 +9,8 @@ public static class ApiConstants
     // Authentication endpoints.
     public const string LoginEndpoint = "/api/auth/login";
     public const string RegisterEndpoint = "/api/auth/register";
+
+    // Patient profile endpoints.
+    public const string CurrentPatientEndpoint = "/api/patients/me";
+    public const string UpdatePatientEndpoint = "/api/patients/me";
 }
