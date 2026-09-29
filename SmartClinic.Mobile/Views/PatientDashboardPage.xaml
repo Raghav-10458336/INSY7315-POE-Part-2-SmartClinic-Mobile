@@ -48,7 +48,7 @@
                         FontSize="23"
                         HorizontalTextAlignment="Center"
                         VerticalTextAlignment="Center"
-                        AutomationProperties.Name="Patient profile" />
+                        SemanticProperties.Description="Patient profile" />
 
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer
@@ -94,7 +94,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Dashboard error message" />
+                    SemanticProperties.Description="Dashboard error message" />
 
             </Border>
 
@@ -218,7 +218,7 @@
                         BackgroundColor="#1565C0"
                         TextColor="White"
                         FontAttributes="Bold"
-                        AutomationProperties.Name="Book appointment"
+                        SemanticProperties.Description="Book appointment"
                         Clicked="OnBookAppointmentClicked" />
 
                 </VerticalStackLayout>
@@ -255,7 +255,7 @@
                         <Label
                             Text="📅"
                             FontSize="25"
-                            AutomationProperties.Name="Appointments" />
+                            SemanticProperties.Description="Appointments" />
 
                         <Label
                             Text="Appointments"
@@ -295,7 +295,7 @@
                             FontSize="27"
                             FontAttributes="Bold"
                             TextColor="#1565C0"
-                            AutomationProperties.Name="Check in" />
+                            SemanticProperties.Description="Check in" />
 
                         <Label
                             Text="Check In"
@@ -335,7 +335,7 @@
                             FontSize="22"
                             FontAttributes="Bold"
                             TextColor="#1565C0"
-                            AutomationProperties.Name="Prescriptions" />
+                            SemanticProperties.Description="Prescriptions" />
 
                         <Label
                             Text="Prescriptions"
@@ -373,7 +373,7 @@
                         <Label
                             Text="📋"
                             FontSize="24"
-                            AutomationProperties.Name="Consultation history" />
+                            SemanticProperties.Description="Consultation history" />
 
                         <Label
                             Text="History"
@@ -425,7 +425,7 @@
                             FontSize="22"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
-                            AutomationProperties.Name="Notifications" />
+                            SemanticProperties.Description="Notifications" />
 
                     </Border>
 

@@ -51,7 +51,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="First name" />
+                    SemanticProperties.Description="First name" />
             </Border>
 
             <!-- Last name -->
@@ -77,7 +77,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Last name" />
+                    SemanticProperties.Description="Last name" />
             </Border>
 
             <!-- Email -->
@@ -104,7 +104,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Email address" />
+                    SemanticProperties.Description="Email address" />
             </Border>
 
             <!-- Phone number -->
@@ -131,7 +131,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Phone number" />
+                    SemanticProperties.Description="Phone number" />
             </Border>
 
             <!-- Date of birth -->
@@ -156,7 +156,7 @@
                     FontSize="15"
                     TextColor="#172B4D"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Date of birth" />
+                    SemanticProperties.Description="Date of birth" />
             </Border>
 
             <!-- Gender -->
@@ -180,7 +180,7 @@
                     FontSize="15"
                     TextColor="#172B4D"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Gender">
+                    SemanticProperties.Description="Gender">
 
                     <Picker.Items>
                         <x:String>Male</x:String>
@@ -215,7 +215,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Password" />
+                    SemanticProperties.Description="Password" />
             </Border>
 
             <!-- Password confirmation -->
@@ -242,7 +242,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Confirm password" />
+                    SemanticProperties.Description="Confirm password" />
             </Border>
 
             <!-- Validation and API errors -->
@@ -260,7 +260,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Registration error message" />
+                    SemanticProperties.Description="Registration error message" />
             </Border>
 
             <!-- Successful registration feedback -->
@@ -278,7 +278,7 @@
                     FontSize="13"
                     TextColor="#1B5E20"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Registration success message" />
+                    SemanticProperties.Description="Registration success message" />
             </Border>
 
             <!-- Registration action -->
@@ -293,7 +293,7 @@
                 FontAttributes="Bold"
                 Command="{Binding RegisterCommand}"
                 IsEnabled="{Binding IsNotBusy}"
-                AutomationProperties.Name="Create account" />
+                SemanticProperties.Description="Create account" />
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
@@ -331,7 +331,7 @@
                  FontSize="14"
                  FontAttributes="Bold"
                  TextColor="#1565C0"
-                 AutomationProperties.Name="Sign in">
+                 SemanticProperties.Description="Sign in">
 
                 <Label.GestureRecognizers>
                 <TapGestureRecognizer

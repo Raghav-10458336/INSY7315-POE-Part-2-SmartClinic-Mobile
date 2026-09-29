@@ -63,7 +63,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Consultation details error message" />
+                    SemanticProperties.Description="Consultation details error message" />
 
             </Border>
 

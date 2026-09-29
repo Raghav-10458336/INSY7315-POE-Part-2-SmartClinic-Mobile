@@ -68,7 +68,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Consultation history error message" />
+                    SemanticProperties.Description="Consultation history error message" />
 
             </Border>
 
@@ -227,7 +227,7 @@
                                     FontSize="13"
                                     FontAttributes="Bold"
                                     Clicked="OnViewConsultationClicked"
-                                    AutomationProperties.Name="View consultation details" />
+                                    SemanticProperties.Description="View consultation details" />
 
                             </VerticalStackLayout>
 

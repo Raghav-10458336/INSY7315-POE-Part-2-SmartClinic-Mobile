@@ -85,7 +85,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Email address" />
+                    SemanticProperties.Description="Email address" />
             </Border>
 
             <!-- Password -->
@@ -112,7 +112,7 @@
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
                     MinimumHeightRequest="48"
-                    AutomationProperties.Name="Password" />
+                    SemanticProperties.Description="Password" />
             </Border>
 
             <!-- Validation and API errors -->
@@ -130,7 +130,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Sign in error message" />
+                    SemanticProperties.Description="Sign in error message" />
             </Border>
 
             <!-- Sign in -->
@@ -145,7 +145,7 @@
                 FontAttributes="Bold"
                 Command="{Binding LoginCommand}"
                 IsEnabled="{Binding IsNotBusy}"
-                AutomationProperties.Name="Sign in" />
+                SemanticProperties.Description="Sign in" />
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
@@ -183,7 +183,7 @@
                     FontSize="14"
                     FontAttributes="Bold"
                     TextColor="#1565C0"
-                    AutomationProperties.Name="Create account">
+                    SemanticProperties.Description="Create account">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer

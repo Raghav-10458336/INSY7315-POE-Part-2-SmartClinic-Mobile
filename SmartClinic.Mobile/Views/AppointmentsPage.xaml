@@ -42,7 +42,7 @@
             TextColor="White"
             FontSize="15"
             FontAttributes="Bold"
-            AutomationProperties.Name="Book appointment" />
+            SemanticProperties.Description="Book appointment" />
 
         <!-- Loading, error and success feedback -->
         <VerticalStackLayout
@@ -82,7 +82,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Appointments error message" />
+                    SemanticProperties.Description="Appointments error message" />
 
             </Border>
 
@@ -100,7 +100,7 @@
                     FontSize="13"
                     TextColor="#2E7D32"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Appointments success message" />
+                    SemanticProperties.Description="Appointments success message" />
 
             </Border>
 
@@ -286,7 +286,7 @@
                                         FontSize="13"
                                         FontAttributes="Bold"
                                         Clicked="OnRescheduleAppointmentClicked"
-                                        AutomationProperties.Name="Reschedule appointment" />
+                                        SemanticProperties.Description="Reschedule appointment" />
 
                                     <Button
                                         Grid.Column="1"
@@ -298,7 +298,7 @@
                                         FontSize="13"
                                         FontAttributes="Bold"
                                         Clicked="OnCancelAppointmentClicked"
-                                        AutomationProperties.Name="Cancel appointment" />
+                                        SemanticProperties.Description="Cancel appointment" />
 
                                 </Grid>
 
@@ -312,7 +312,7 @@
                                     FontSize="13"
                                     FontAttributes="Bold"
                                     Clicked="OnCheckInAppointmentClicked"
-                                    AutomationProperties.Name="Check in and view queue status" />
+                                    SemanticProperties.Description="Check in and view queue status" />
 
                             </VerticalStackLayout>
 

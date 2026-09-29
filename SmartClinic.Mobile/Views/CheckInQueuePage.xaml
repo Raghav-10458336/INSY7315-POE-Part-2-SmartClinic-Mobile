@@ -138,7 +138,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Check-in error message" />
+                    SemanticProperties.Description="Check-in error message" />
 
             </Border>
 
@@ -156,7 +156,7 @@
                     FontSize="13"
                     TextColor="#2E7D32"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Check-in success message" />
+                    SemanticProperties.Description="Check-in success message" />
 
             </Border>
 
@@ -197,7 +197,7 @@
                         FontAttributes="Bold"
                         Clicked="OnCheckInClicked"
                         IsEnabled="{Binding IsNotBusy}"
-                        AutomationProperties.Name="Check in for appointment" />
+                        SemanticProperties.Description="Check in for appointment" />
 
                 </VerticalStackLayout>
 
@@ -335,7 +335,7 @@
                         FontAttributes="Bold"
                         Command="{Binding RefreshQueueCommand}"
                         IsEnabled="{Binding IsNotBusy}"
-                        AutomationProperties.Name="Refresh queue status" />
+                        SemanticProperties.Description="Refresh queue status" />
 
                 </VerticalStackLayout>
 

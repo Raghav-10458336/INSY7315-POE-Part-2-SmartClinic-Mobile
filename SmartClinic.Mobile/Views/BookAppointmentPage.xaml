@@ -61,7 +61,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Booking error message" />
+                    SemanticProperties.Description="Booking error message" />
 
             </Border>
 
@@ -88,7 +88,7 @@
                     FontSize="15"
                     TextColor="#172B4D"
                     MinimumHeightRequest="50"
-                    AutomationProperties.Name="Select doctor" />
+                    SemanticProperties.Description="Select doctor" />
 
             </Border>
 
@@ -145,7 +145,7 @@
                     TextColor="#1565C0"
                     FontSize="12"
                     FontAttributes="Bold"
-                    AutomationProperties.Name="View available appointment times"
+                    SemanticProperties.Description="View available appointment times"
                     Clicked="OnViewTimesClicked" />
 
             </Grid>
@@ -235,7 +235,7 @@
                     FontSize="14"
                     TextColor="#172B4D"
                     PlaceholderColor="#8993A4"
-                    AutomationProperties.Name="Reason for visit" />
+                    SemanticProperties.Description="Reason for visit" />
 
             </Border>
 
@@ -269,7 +269,7 @@
                 FontAttributes="Bold"
                 IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding CreateAppointmentCommand}"
-                AutomationProperties.Name="Confirm appointment" />
+                SemanticProperties.Description="Confirm appointment" />
 
             <Label
                 Text="You will be able to review the appointment before it is submitted."

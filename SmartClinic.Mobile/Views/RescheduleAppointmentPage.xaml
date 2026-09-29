@@ -135,7 +135,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Reschedule appointment error message" />
+                    SemanticProperties.Description="Reschedule appointment error message" />
 
             </Border>
 
@@ -231,7 +231,7 @@
                     FontSize="13"
                     TextColor="#2E7D32"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Reschedule appointment success message" />
+                    SemanticProperties.Description="Reschedule appointment success message" />
 
             </Border>
 
@@ -246,7 +246,7 @@
                 FontAttributes="Bold"
                 Command="{Binding RescheduleAppointmentCommand}"
                 IsEnabled="{Binding IsNotBusy}"
-                AutomationProperties.Name="Confirm new appointment time" />
+                SemanticProperties.Description="Confirm new appointment time" />
 
             <Label
                 Text="Your existing appointment remains unchanged until the new time is successfully confirmed."

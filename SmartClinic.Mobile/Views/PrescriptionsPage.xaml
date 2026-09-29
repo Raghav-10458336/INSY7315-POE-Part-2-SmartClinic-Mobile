@@ -68,7 +68,7 @@
                     FontSize="13"
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
-                    AutomationProperties.Name="Prescriptions error message" />
+                    SemanticProperties.Description="Prescriptions error message" />
 
             </Border>
 
