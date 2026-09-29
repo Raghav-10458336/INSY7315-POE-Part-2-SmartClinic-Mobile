@@ -14,6 +14,9 @@ public partial class RescheduleAppointmentViewModel : BaseViewModel
 
     public ObservableCollection<DoctorAvailability> AvailableSlots { get; } = [];
 
+    // Raised after the appointment has been successfully rescheduled.
+    public event EventHandler? RescheduleCompleted;
+
     [ObservableProperty]
     private Appointment? appointment;
 
@@ -155,6 +158,9 @@ public partial class RescheduleAppointmentViewModel : BaseViewModel
                 "Your appointment has been rescheduled successfully.";
 
             HasSuccess = true;
+
+            // Notify the page so it can return to the refreshed appointments list.
+            RescheduleCompleted?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception)
         {
