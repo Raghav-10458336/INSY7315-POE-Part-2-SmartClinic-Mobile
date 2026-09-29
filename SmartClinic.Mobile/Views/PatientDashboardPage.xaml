@@ -50,6 +50,11 @@
                         VerticalTextAlignment="Center"
                         AutomationProperties.Name="Patient profile" />
 
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnProfileTapped" />
+                    </Border.GestureRecognizers>
+
                 </Border>
 
             </Grid>

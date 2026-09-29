@@ -54,6 +54,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<ConsultationDetailsViewModel>();
             builder.Services.AddTransient<PrescriptionsViewModel>();
             builder.Services.AddTransient<NotificationsViewModel>();
+            builder.Services.AddTransient<PatientProfileViewModel>();
 
             // Register authentication pages for dependency injection.
             builder.Services.AddTransient<LoginPage>();
@@ -67,6 +68,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<ConsultationDetailsPage>();
             builder.Services.AddTransient<PrescriptionsPage>();
             builder.Services.AddTransient<NotificationsPage>();
+            builder.Services.AddTransient<PatientProfilePage>();
 
 
 

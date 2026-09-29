@@ -121,4 +121,18 @@ public partial class PatientDashboardPage : ContentPage
             await Navigation.PushAsync(notificationsPage);
         }
     }
+
+    private async void OnProfileTapped(
+    object? sender,
+    TappedEventArgs e)
+    {
+        // Open the authenticated patient's profile.
+        var profilePage = Handler?.MauiContext?.Services
+            .GetService<PatientProfilePage>();
+
+        if (profilePage is not null)
+        {
+            await Navigation.PushAsync(profilePage);
+        }
+    }
 }
