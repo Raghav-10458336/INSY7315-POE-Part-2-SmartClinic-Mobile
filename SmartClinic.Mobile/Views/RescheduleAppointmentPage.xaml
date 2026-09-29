@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.RescheduleAppointmentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
+    Title="Reschedule Appointment"
+    BackgroundColor="#F5F8FA">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="24,24,24,40"
+            Spacing="18">
+
+            <!-- Page heading -->
+            <VerticalStackLayout Spacing="5">
+
+                <Label
+                    Text="Reschedule Appointment"
+                    FontSize="26"
+                    FontAttributes="Bold"
+                    TextColor="#172B4D" />
+
+                <Label
+                    Text="Choose a new available time for your appointment."
+                    FontSize="14"
+                    TextColor="#6B778C"
+                    LineBreakMode="WordWrap" />
+
+            </VerticalStackLayout>
+
+            <!-- Current appointment -->
+            <Border
+                Padding="16"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 12">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="Current Appointment"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        TextColor="#6B778C" />
+
+                    <Label
+                        Text="{Binding Appointment.DoctorName}"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="{Binding Appointment.DoctorSpecialisation}"
+                        FontSize="13"
+                        TextColor="#1565C0" />
+
+                    <Grid
+                        Margin="0,4,0,0"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="12">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="2">
+
+                            <Label
+                                Text="Current date"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#6B778C" />
+
+                            <Label
+                                Text="{Binding Appointment.AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
+                                FontSize="14"
+                                TextColor="#172B4D" />
+
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="2">
+
+                            <Label
+                                Text="Current time"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#6B778C" />
+
+                            <Label
+                                Text="{Binding Appointment.AppointmentDateTime, StringFormat='{0:HH:mm}'}"
+                                FontSize="14"
+                                TextColor="#172B4D" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Loading feedback -->
+            <HorizontalStackLayout
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    Color="#1565C0"
+                    WidthRequest="22"
+                    HeightRequest="22" />
+
+                <Label
+                    Text="Updating appointment..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <!-- Error feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Reschedule appointment error message" />
+
+            </Border>
+
+            <!-- New appointment time -->
+            <VerticalStackLayout Spacing="8">
+
+                <Label
+                    Text="Select a new time"
+                    FontSize="15"
+                    FontAttributes="Bold"
+                    TextColor="#172B4D" />
+
+                <Label
+                    Text="Available times for your current doctor are shown below."
+                    FontSize="12"
+                    TextColor="#6B778C"
+                    LineBreakMode="WordWrap" />
+
+                <CollectionView
+                    ItemsSource="{Binding AvailableSlots}"
+                    IsVisible="{Binding HasAvailableSlots}"
+                    SelectedItem="{Binding SelectedSlot}"
+                    SelectionMode="Single"
+                    HeightRequest="230">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout
+                            Orientation="Vertical"
+                            ItemSpacing="8" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:DoctorAvailability">
+
+                            <Border
+                                Padding="14"
+                                BackgroundColor="White"
+                                Stroke="#D9E2EC"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 10">
+
+                                <Grid
+                                    ColumnDefinitions="*,Auto"
+                                    ColumnSpacing="12">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="3">
+
+                                        <Label
+                                            Text="{Binding StartDateTime, StringFormat='{0:dddd, dd MMM yyyy}'}"
+                                            FontSize="14"
+                                            FontAttributes="Bold"
+                                            TextColor="#172B4D" />
+
+                                        <Label
+                                            Text="{Binding StartDateTime, StringFormat='{0:HH:mm}'}"
+                                            FontSize="13"
+                                            TextColor="#1565C0" />
+
+                                    </VerticalStackLayout>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="Available"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        TextColor="#2E7D32"
+                                        VerticalTextAlignment="Center" />
+
+                                </Grid>
+
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+
+            <!-- Success feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#E8F5E9"
+                Stroke="#C8E6C9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasSuccess}">
+
+                <Label
+                    Text="{Binding SuccessMessage}"
+                    FontSize="13"
+                    TextColor="#2E7D32"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Reschedule appointment success message" />
+
+            </Border>
+
+            <!-- Confirm action -->
+            <Button
+                Text="Confirm New Appointment Time"
+                HeightRequest="50"
+                CornerRadius="10"
+                BackgroundColor="#1565C0"
+                TextColor="White"
+                FontSize="15"
+                FontAttributes="Bold"
+                Command="{Binding RescheduleAppointmentCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                AutomationProperties.Name="Confirm new appointment time" />
+
+            <Label
+                Text="Your existing appointment remains unchanged until the new time is successfully confirmed."
+                FontSize="11"
+                TextColor="#6B778C"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="WordWrap" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

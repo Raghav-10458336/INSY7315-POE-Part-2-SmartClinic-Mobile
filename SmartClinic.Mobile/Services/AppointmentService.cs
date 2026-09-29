@@ -4,7 +4,6 @@ using SmartClinic.Mobile.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-
 namespace SmartClinic.Mobile.Services;
 
 public class AppointmentService : IAppointmentService
@@ -72,7 +71,7 @@ public class AppointmentService : IAppointmentService
     }
 
     public async Task<Appointment?> CreateAppointmentAsync(
-    CreateAppointmentRequest request)
+        CreateAppointmentRequest request)
     {
         try
         {
@@ -81,6 +80,65 @@ public class AppointmentService : IAppointmentService
             // Submit the selected doctor, appointment time and visit reason.
             var response = await _httpClient.PostAsJsonAsync(
                 ApiConstants.AppointmentsEndpoint,
+                request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<Appointment>();
+        }
+        catch (HttpRequestException)
+        {
+            return null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public async Task<bool> CancelAppointmentAsync(int appointmentId)
+    {
+        try
+        {
+            await AddAuthenticationHeaderAsync();
+
+            // Cancel the selected appointment through its API endpoint.
+            var endpoint =
+                $"{ApiConstants.AppointmentsEndpoint}/{appointmentId}/cancel";
+
+            var response = await _httpClient.PutAsync(
+                endpoint,
+                null);
+
+            return response.IsSuccessStatusCode;
+        }
+        catch (HttpRequestException)
+        {
+            return false;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    public async Task<Appointment?> RescheduleAppointmentAsync(
+    int appointmentId,
+    RescheduleAppointmentRequest request)
+    {
+        try
+        {
+            await AddAuthenticationHeaderAsync();
+
+            // Submit the patient's newly selected appointment time.
+            var endpoint =
+                $"{ApiConstants.AppointmentsEndpoint}/{appointmentId}/reschedule";
+
+            var response = await _httpClient.PutAsJsonAsync(
+                endpoint,
                 request);
 
             if (!response.IsSuccessStatusCode)

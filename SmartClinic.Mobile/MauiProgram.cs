@@ -36,7 +36,6 @@ namespace SmartClinic.Mobile
 
             // Register patient services used for authenticated profile operations.
             builder.Services.AddSingleton<IPatientService, PatientService>();
-
             builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
             builder.Services.AddSingleton<IDoctorService, DoctorService>();
 
@@ -46,6 +45,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<PatientDashboardViewModel>();
             builder.Services.AddTransient<AppointmentsViewModel>();
             builder.Services.AddTransient<BookAppointmentViewModel>();
+            builder.Services.AddTransient<RescheduleAppointmentViewModel>();
 
             // Register authentication pages for dependency injection.
             builder.Services.AddTransient<LoginPage>();
@@ -53,6 +53,8 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<PatientDashboardPage>();
             builder.Services.AddTransient<AppointmentsPage>();
             builder.Services.AddTransient<BookAppointmentPage>();
+            builder.Services.AddTransient<RescheduleAppointmentPage>();
+
 
 
             return builder.Build();

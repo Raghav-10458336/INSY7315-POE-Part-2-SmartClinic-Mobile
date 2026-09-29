@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SmartClinic.Mobile.Models;
 using SmartClinic.Mobile.Services;
 
@@ -16,6 +17,12 @@ public partial class AppointmentsViewModel : BaseViewModel
 
     [ObservableProperty]
     private bool hasError;
+
+    [ObservableProperty]
+    private string successMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool hasSuccess;
 
     [ObservableProperty]
     private bool hasAppointments;
@@ -52,8 +59,7 @@ public partial class AppointmentsViewModel : BaseViewModel
                 Appointments.Add(appointment);
             }
 
-            HasAppointments = Appointments.Count > 0;
-            HasNoAppointments = !HasAppointments;
+            UpdateAppointmentState();
         }
         catch (Exception)
         {
@@ -68,6 +74,62 @@ public partial class AppointmentsViewModel : BaseViewModel
         }
     }
 
+    [RelayCommand]
+    private async Task CancelAppointmentAsync(Appointment? appointment)
+    {
+        if (appointment is null || IsBusy)
+        {
+            return;
+        }
+
+        ClearError();
+        ClearSuccess();
+
+        // Completed or already cancelled appointments cannot be cancelled.
+        if (appointment.Status == AppointmentStatus.Completed ||
+            appointment.Status == AppointmentStatus.Cancelled)
+        {
+            ShowError("This appointment cannot be cancelled.");
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+
+            // Request cancellation of the selected appointment.
+            var wasCancelled =
+                await _appointmentService.CancelAppointmentAsync(appointment.Id);
+
+            if (!wasCancelled)
+            {
+                ShowError("Unable to cancel the appointment. Please try again.");
+                return;
+            }
+
+            // Remove the cancelled appointment from the active list.
+            Appointments.Remove(appointment);
+            UpdateAppointmentState();
+
+            SuccessMessage = "Your appointment has been cancelled successfully.";
+            HasSuccess = true;
+        }
+        catch (Exception)
+        {
+            ShowError("Unable to cancel the appointment. Please try again.");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void UpdateAppointmentState()
+    {
+        HasAppointments = Appointments.Count > 0;
+        HasNoAppointments = !HasAppointments;
+    }
+
     private void ShowError(string message)
     {
         ErrorMessage = message;
@@ -78,5 +140,11 @@ public partial class AppointmentsViewModel : BaseViewModel
     {
         ErrorMessage = string.Empty;
         HasError = false;
+    }
+
+    private void ClearSuccess()
+    {
+        SuccessMessage = string.Empty;
+        HasSuccess = false;
     }
 }

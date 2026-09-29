@@ -44,7 +44,7 @@
             FontAttributes="Bold"
             AutomationProperties.Name="Book appointment" />
 
-        <!-- Loading and error feedback -->
+        <!-- Loading, error and success feedback -->
         <VerticalStackLayout
             Grid.Row="2"
             Margin="0,18,0,0"
@@ -61,13 +61,14 @@
                     HeightRequest="22" />
 
                 <Label
-                    Text="Loading appointments..."
+                    Text="Updating appointments..."
                     FontSize="13"
                     TextColor="#6B778C"
                     VerticalTextAlignment="Center" />
 
             </HorizontalStackLayout>
 
+            <!-- Error feedback -->
             <Border
                 Padding="12"
                 BackgroundColor="#FFEBEE"
@@ -82,6 +83,24 @@
                     TextColor="#B71C1C"
                     LineBreakMode="WordWrap"
                     AutomationProperties.Name="Appointments error message" />
+
+            </Border>
+
+            <!-- Success feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#E8F5E9"
+                Stroke="#C8E6C9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasSuccess}">
+
+                <Label
+                    Text="{Binding SuccessMessage}"
+                    FontSize="13"
+                    TextColor="#2E7D32"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Appointments success message" />
 
             </Border>
 
@@ -150,9 +169,9 @@
                             StrokeThickness="1"
                             StrokeShape="RoundRectangle 14">
 
-                            <VerticalStackLayout Spacing="10">
+                            <VerticalStackLayout Spacing="12">
 
-                                <!-- Doctor -->
+                                <!-- Doctor and appointment status -->
                                 <Grid
                                     ColumnDefinitions="*,Auto"
                                     ColumnSpacing="12">
@@ -235,9 +254,7 @@
                                 </Grid>
 
                                 <!-- Reason for visit -->
-                                <VerticalStackLayout
-                                    Spacing="3"
-                                    IsVisible="{Binding ReasonForVisit}">
+                                <VerticalStackLayout Spacing="3">
 
                                     <Label
                                         Text="Reason for visit"
@@ -252,6 +269,41 @@
                                         LineBreakMode="WordWrap" />
 
                                 </VerticalStackLayout>
+
+                                <!-- Appointment actions -->
+                                <Grid
+                                    Margin="0,5,0,0"
+                                    ColumnDefinitions="*,*"
+                                    ColumnSpacing="10">
+
+                                    <!-- Rescheduling will be enabled in the next workflow -->
+                                    <Button
+                                        Grid.Column="0"
+                                        Text="Reschedule"
+                                        HeightRequest="44"
+                                        CornerRadius="9"
+                                        BackgroundColor="#E3F2FD"
+                                        TextColor="#1565C0"
+                                        FontSize="13"
+                                        FontAttributes="Bold"
+                                        Clicked="OnRescheduleAppointmentClicked"
+                                        AutomationProperties.Name="Reschedule appointment" />
+
+                                    <!-- Confirmation is handled by the page before
+                                         the cancellation command is executed -->
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Cancel"
+                                        HeightRequest="44"
+                                        CornerRadius="9"
+                                        BackgroundColor="#FFEBEE"
+                                        TextColor="#C62828"
+                                        FontSize="13"
+                                        FontAttributes="Bold"
+                                        Clicked="OnCancelAppointmentClicked"
+                                        AutomationProperties.Name="Cancel appointment" />
+
+                                </Grid>
 
                             </VerticalStackLayout>
 
