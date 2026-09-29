@@ -24,6 +24,11 @@ public static class ApiConstants
 
     // Patient check-in and queue endpoints.
     public const string CheckInAppointmentEndpoint = "/api/appointments/{0}/check-in";
-
     public const string QueueStatusEndpoint = "/api/appointments/{0}/queue";
+
+    // Clinical record endpoints for the authenticated patient.
+    public const string ConsultationsEndpoint = "/api/consultations";
+    public const string ConsultationDetailsEndpoint = "/api/consultations/{0}";
+    public const string PrescriptionsEndpoint = "/api/prescriptions";
+    public const string ConsultationPrescriptionsEndpoint = "/api/consultations/{0}/prescriptions";
 }

@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.ConsultationDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
+    Title="Consultation Details"
+    BackgroundColor="#F5F8FA">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="24,24,24,40"
+            Spacing="18">
+
+            <!-- Page heading -->
+            <VerticalStackLayout Spacing="5">
+
+                <Label
+                    Text="Consultation Details"
+                    FontSize="26"
+                    FontAttributes="Bold"
+                    TextColor="#172B4D" />
+
+                <Label
+                    Text="Review the clinical information recorded during your consultation."
+                    FontSize="14"
+                    TextColor="#6B778C"
+                    LineBreakMode="WordWrap" />
+
+            </VerticalStackLayout>
+
+            <!-- Loading feedback -->
+            <HorizontalStackLayout
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    WidthRequest="22"
+                    HeightRequest="22"
+                    Color="#1565C0" />
+
+                <Label
+                    Text="Loading consultation details..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <!-- Error feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Consultation details error message" />
+
+            </Border>
+
+            <!-- Consultation overview -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Grid
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="12">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="3">
+
+                            <Label
+                                Text="{Binding Consultation.DoctorName}"
+                                FontSize="19"
+                                FontAttributes="Bold"
+                                TextColor="#172B4D" />
+
+                            <Label
+                                Text="Consulting Doctor"
+                                FontSize="12"
+                                TextColor="#1565C0" />
+
+                        </VerticalStackLayout>
+
+                        <Border
+                            Grid.Column="1"
+                            Padding="9,5"
+                            VerticalOptions="Start"
+                            BackgroundColor="#E8F5E9"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 8">
+
+                            <Label
+                                Text="{Binding Consultation.ConsultationDate, StringFormat='{0:dd MMM yyyy}'}"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#2E7D32" />
+
+                        </Border>
+
+                    </Grid>
+
+                    <BoxView
+                        HeightRequest="1"
+                        BackgroundColor="#E6ECF1" />
+
+                    <VerticalStackLayout Spacing="3">
+
+                        <Label
+                            Text="Consultation date"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#6B778C" />
+
+                        <Label
+                            Text="{Binding Consultation.ConsultationDate, StringFormat='{0:dd MMMM yyyy, HH:mm}'}"
+                            FontSize="14"
+                            TextColor="#172B4D" />
+
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Diagnosis -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Diagnosis"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="{Binding Consultation.Diagnosis}"
+                        FontSize="14"
+                        TextColor="#44546A"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Treatment -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Treatment"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="{Binding Consultation.Treatment}"
+                        FontSize="14"
+                        TextColor="#44546A"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Consultation summary -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Consultation Summary"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <Label
+                        Text="{Binding Consultation.Summary}"
+                        FontSize="14"
+                        TextColor="#44546A"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Follow-up information -->
+            <Border
+                Padding="18"
+                BackgroundColor="#FFF8E1"
+                Stroke="#FFE082"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label
+                        Text="Follow-Up"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D" />
+
+                    <VerticalStackLayout Spacing="3">
+
+                        <Label
+                            Text="Instructions"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#795548" />
+
+                        <Label
+                            Text="{Binding Consultation.FollowUpInstructions}"
+                            FontSize="14"
+                            TextColor="#5D4037"
+                            LineBreakMode="WordWrap" />
+
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="3">
+
+                        <Label
+                            Text="Follow-up date"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#795548" />
+
+                        <Label
+                            Text="{Binding Consultation.FollowUpDate, StringFormat='{0:dd MMMM yyyy}'}"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#5D4037" />
+
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Prescriptions heading -->
+            <VerticalStackLayout Spacing="4">
+
+                <Label
+                    Text="Prescriptions"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    TextColor="#172B4D" />
+
+                <Label
+                    Text="Medication issued during this consultation."
+                    FontSize="13"
+                    TextColor="#6B778C" />
+
+            </VerticalStackLayout>
+
+            <!-- No prescriptions state -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasNoPrescriptions}">
+
+                <VerticalStackLayout
+                    Spacing="7"
+                    HorizontalOptions="Center">
+
+                    <Label
+                        Text="No prescriptions"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="No medication was recorded for this consultation."
+                        FontSize="12"
+                        TextColor="#6B778C"
+                        HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Prescriptions issued during the consultation -->
+            <VerticalStackLayout
+                BindableLayout.ItemsSource="{Binding Prescriptions}"
+                IsVisible="{Binding HasPrescriptions}"
+                Spacing="12">
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:Prescription">
+
+                        <Border
+                            Padding="18"
+                            BackgroundColor="White"
+                            Stroke="#D9E2EC"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14">
+
+                            <VerticalStackLayout Spacing="12">
+
+                                <Grid
+                                    ColumnDefinitions="*,Auto"
+                                    ColumnSpacing="10">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="3">
+
+                                        <Label
+                                            Text="{Binding MedicationName}"
+                                            FontSize="17"
+                                            FontAttributes="Bold"
+                                            TextColor="#172B4D" />
+
+                                        <Label
+                                            Text="{Binding Dosage}"
+                                            FontSize="13"
+                                            FontAttributes="Bold"
+                                            TextColor="#1565C0" />
+
+                                    </VerticalStackLayout>
+
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="8,5"
+                                        VerticalOptions="Start"
+                                        BackgroundColor="#E3F2FD"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 8">
+
+                                        <Label
+                                            Text="PRESCRIBED"
+                                            FontSize="10"
+                                            FontAttributes="Bold"
+                                            TextColor="#1565C0" />
+
+                                    </Border>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="*,*"
+                                    ColumnSpacing="12">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="Frequency"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#6B778C" />
+
+                                        <Label
+                                            Text="{Binding Frequency}"
+                                            FontSize="13"
+                                            TextColor="#172B4D" />
+
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="Duration"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#6B778C" />
+
+                                        <Label
+                                            Text="{Binding Duration}"
+                                            FontSize="13"
+                                            TextColor="#172B4D" />
+
+                                    </VerticalStackLayout>
+
+                                </Grid>
+
+                                <VerticalStackLayout Spacing="3">
+
+                                    <Label
+                                        Text="Instructions"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        TextColor="#6B778C" />
+
+                                    <Label
+                                        Text="{Binding Instructions}"
+                                        FontSize="13"
+                                        TextColor="#44546A"
+                                        LineBreakMode="WordWrap" />
+
+                                </VerticalStackLayout>
+
+                                <Grid
+                                    ColumnDefinitions="*,*"
+                                    ColumnSpacing="12">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="Issued"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#6B778C" />
+
+                                        <Label
+                                            Text="{Binding IssuedDate, StringFormat='{0:dd MMM yyyy}'}"
+                                            FontSize="12"
+                                            TextColor="#172B4D" />
+
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="Expiry"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#6B778C" />
+
+                                        <Label
+                                            Text="{Binding ExpiryDate, StringFormat='{0:dd MMM yyyy}'}"
+                                            FontSize="12"
+                                            TextColor="#172B4D" />
+
+                                    </VerticalStackLayout>
+
+                                </Grid>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

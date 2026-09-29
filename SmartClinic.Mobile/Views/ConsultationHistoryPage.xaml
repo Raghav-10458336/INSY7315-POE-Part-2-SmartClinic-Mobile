@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.ConsultationHistoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
+    Title="Consultation History"
+    BackgroundColor="#F5F8FA">
+
+    <Grid
+        Padding="24,24,24,30"
+        RowDefinitions="Auto,Auto,*">
+
+        <!-- Page heading -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Spacing="5">
+
+            <Label
+                Text="Consultation History"
+                FontSize="26"
+                FontAttributes="Bold"
+                TextColor="#172B4D" />
+
+            <Label
+                Text="Review your previous consultations and medical information."
+                FontSize="14"
+                TextColor="#6B778C"
+                LineBreakMode="WordWrap" />
+
+        </VerticalStackLayout>
+
+        <!-- Loading and error feedback -->
+        <VerticalStackLayout
+            Grid.Row="1"
+            Margin="0,18,0,0"
+            Spacing="12">
+
+            <HorizontalStackLayout
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    WidthRequest="22"
+                    HeightRequest="22"
+                    Color="#1565C0" />
+
+                <Label
+                    Text="Loading consultation history..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <Border
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Consultation history error message" />
+
+            </Border>
+
+        </VerticalStackLayout>
+
+        <!-- Consultation content -->
+        <Grid
+            Grid.Row="2"
+            Margin="0,20,0,0">
+
+            <!-- Empty state -->
+            <Border
+                Padding="26"
+                VerticalOptions="Start"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasNoConsultations}">
+
+                <VerticalStackLayout
+                    Spacing="10"
+                    HorizontalOptions="Center">
+
+                    <Label
+                        Text="📋"
+                        FontSize="34"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="No consultation history"
+                        FontSize="17"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Completed consultations will appear here for you to review."
+                        FontSize="13"
+                        TextColor="#6B778C"
+                        HorizontalTextAlignment="Center"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Consultation list -->
+            <CollectionView
+                ItemsSource="{Binding Consultations}"
+                IsVisible="{Binding HasConsultations}"
+                SelectionMode="None">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Vertical"
+                        ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Consultation">
+
+                        <Border
+                            Padding="18"
+                            BackgroundColor="White"
+                            Stroke="#D9E2EC"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14">
+
+                            <VerticalStackLayout Spacing="13">
+
+                                <!-- Doctor and date -->
+                                <Grid
+                                    ColumnDefinitions="*,Auto"
+                                    ColumnSpacing="12">
+
+                                    <VerticalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="3">
+
+                                        <Label
+                                            Text="{Binding DoctorName}"
+                                            FontSize="17"
+                                            FontAttributes="Bold"
+                                            TextColor="#172B4D" />
+
+                                        <Label
+                                            Text="Consultation"
+                                            FontSize="12"
+                                            TextColor="#1565C0" />
+
+                                    </VerticalStackLayout>
+
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="9,5"
+                                        VerticalOptions="Start"
+                                        BackgroundColor="#E8F5E9"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 8">
+
+                                        <Label
+                                            Text="{Binding ConsultationDate, StringFormat='{0:dd MMM yyyy}'}"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            TextColor="#2E7D32" />
+
+                                    </Border>
+
+                                </Grid>
+
+                                <!-- Diagnosis preview -->
+                                <VerticalStackLayout Spacing="3">
+
+                                    <Label
+                                        Text="Diagnosis"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        TextColor="#6B778C" />
+
+                                    <Label
+                                        Text="{Binding Diagnosis}"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        TextColor="#172B4D"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="2" />
+
+                                </VerticalStackLayout>
+
+                                <!-- Consultation summary preview -->
+                                <VerticalStackLayout Spacing="3">
+
+                                    <Label
+                                        Text="Summary"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        TextColor="#6B778C" />
+
+                                    <Label
+                                        Text="{Binding Summary}"
+                                        FontSize="13"
+                                        TextColor="#44546A"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="3" />
+
+                                </VerticalStackLayout>
+
+                                <!-- Open the complete clinical record -->
+                                <Button
+                                    Text="View Consultation Details"
+                                    HeightRequest="44"
+                                    CornerRadius="9"
+                                    BackgroundColor="#E3F2FD"
+                                    TextColor="#1565C0"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    Clicked="OnViewConsultationClicked"
+                                    AutomationProperties.Name="View consultation details" />
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
