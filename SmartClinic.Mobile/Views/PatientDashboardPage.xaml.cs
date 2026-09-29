@@ -52,6 +52,34 @@ public partial class PatientDashboardPage : ContentPage
         }
     }
 
+    private async void OnCheckInTapped(
+        object? sender,
+        TappedEventArgs e)
+    {
+        var appointment = _viewModel.UpcomingAppointment;
+
+        // Check-in requires an upcoming appointment.
+        if (appointment is null)
+        {
+            await DisplayAlertAsync(
+                "No Upcoming Appointment",
+                "You need an upcoming appointment before you can check in.",
+                "OK");
+
+            return;
+        }
+
+        // Resolve the check-in page through dependency injection.
+        var checkInPage = Handler?.MauiContext?.Services
+            .GetService<CheckInQueuePage>();
+
+        if (checkInPage is not null)
+        {
+            await checkInPage.InitialiseAsync(appointment);
+            await Navigation.PushAsync(checkInPage);
+        }
+    }
+
     private async void OnPrescriptionsTapped(
         object? sender,
         TappedEventArgs e)

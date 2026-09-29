@@ -305,6 +305,11 @@
 
                     </VerticalStackLayout>
 
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnCheckInTapped" />
+                    </Border.GestureRecognizers>
+
                 </Border>
 
                 <!-- Prescriptions -->
