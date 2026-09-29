@@ -19,8 +19,6 @@ namespace SmartClinic.Mobile
         protected override Window CreateWindow(IActivationState? activationState)
         {
             var loginPage = _serviceProvider.GetRequiredService<LoginPage>();
-
-            // Use a navigation container for the authentication screens.
             return new Window(new NavigationPage(loginPage));
         }
     }

@@ -270,13 +270,12 @@
 
                                 </VerticalStackLayout>
 
-                                <!-- Appointment actions -->
+                                <!-- Appointment management actions -->
                                 <Grid
                                     Margin="0,5,0,0"
                                     ColumnDefinitions="*,*"
                                     ColumnSpacing="10">
 
-                                    <!-- Rescheduling will be enabled in the next workflow -->
                                     <Button
                                         Grid.Column="0"
                                         Text="Reschedule"
@@ -289,8 +288,6 @@
                                         Clicked="OnRescheduleAppointmentClicked"
                                         AutomationProperties.Name="Reschedule appointment" />
 
-                                    <!-- Confirmation is handled by the page before
-                                         the cancellation command is executed -->
                                     <Button
                                         Grid.Column="1"
                                         Text="Cancel"
@@ -304,6 +301,18 @@
                                         AutomationProperties.Name="Cancel appointment" />
 
                                 </Grid>
+
+                                <!-- Patient check-in and queue action -->
+                                <Button
+                                    Text="Check In &amp; View Queue"
+                                    HeightRequest="44"
+                                    CornerRadius="9"
+                                    BackgroundColor="#1565C0"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    Clicked="OnCheckInAppointmentClicked"
+                                    AutomationProperties.Name="Check in and view queue status" />
 
                             </VerticalStackLayout>
 

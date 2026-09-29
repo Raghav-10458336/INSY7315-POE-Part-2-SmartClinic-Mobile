@@ -21,4 +21,9 @@ public static class ApiConstants
     // Doctor endpoints used during appointment booking.
     public const string DoctorsEndpoint = "/api/doctors";
     public const string DoctorAvailabilityEndpoint = "/api/doctors/{0}/availability";
+
+    // Patient check-in and queue endpoints.
+    public const string CheckInAppointmentEndpoint = "/api/appointments/{0}/check-in";
+
+    public const string QueueStatusEndpoint = "/api/appointments/{0}/queue";
 }

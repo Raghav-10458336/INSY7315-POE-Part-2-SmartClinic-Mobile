@@ -84,4 +84,29 @@ public partial class AppointmentsPage : ContentPage
 
         await Navigation.PushAsync(reschedulePage);
     }
+
+    private async void OnCheckInAppointmentClicked(
+    object? sender,
+    EventArgs e)
+    {
+        if (sender is not Button button ||
+            button.BindingContext is not Appointment appointment)
+        {
+            return;
+        }
+
+        // Resolve the check-in page through dependency injection.
+        var checkInPage = Handler?.MauiContext?.Services
+            .GetService<CheckInQueuePage>();
+
+        if (checkInPage is null)
+        {
+            return;
+        }
+
+        // Pass the selected appointment into the check-in workflow.
+        await checkInPage.InitialiseAsync(appointment);
+
+        await Navigation.PushAsync(checkInPage);
+    }
 }

@@ -53,8 +53,8 @@ public partial class AppointmentsViewModel : BaseViewModel
             // Retrieve appointments belonging to the authenticated patient.
             var appointments = await _appointmentService.GetAppointmentsAsync();
 
-            foreach (var appointment in appointments
-                         .OrderBy(a => a.AppointmentDateTime))
+            
+            foreach (var appointment in appointments.OrderBy(a => a.AppointmentDateTime))
             {
                 Appointments.Add(appointment);
             }

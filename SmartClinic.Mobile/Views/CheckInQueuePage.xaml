@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.CheckInQueuePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Check In"
+    BackgroundColor="#F5F8FA">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="24,24,24,40"
+            Spacing="18">
+
+            <!-- Page heading -->
+            <VerticalStackLayout Spacing="5">
+
+                <Label
+                    Text="Clinic Check-In"
+                    FontSize="26"
+                    FontAttributes="Bold"
+                    TextColor="#172B4D" />
+
+                <Label
+                    Text="Check in for your appointment and follow your queue status."
+                    FontSize="14"
+                    TextColor="#6B778C"
+                    LineBreakMode="WordWrap" />
+
+            </VerticalStackLayout>
+
+            <!-- Appointment summary -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label
+                        Text="Today's Appointment"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        TextColor="#6B778C" />
+
+                    <VerticalStackLayout Spacing="3">
+
+                        <Label
+                            Text="{Binding Appointment.DoctorName}"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="{Binding Appointment.DoctorSpecialisation}"
+                            FontSize="13"
+                            TextColor="#1565C0" />
+
+                    </VerticalStackLayout>
+
+                    <Grid
+                        Margin="0,4,0,0"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="12">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="2">
+
+                            <Label
+                                Text="Date"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#6B778C" />
+
+                            <Label
+                                Text="{Binding Appointment.AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
+                                FontSize="14"
+                                TextColor="#172B4D" />
+
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="2">
+
+                            <Label
+                                Text="Time"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#6B778C" />
+
+                            <Label
+                                Text="{Binding Appointment.AppointmentDateTime, StringFormat='{0:HH:mm}'}"
+                                FontSize="14"
+                                TextColor="#172B4D" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Loading feedback -->
+            <HorizontalStackLayout
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    Color="#1565C0"
+                    WidthRequest="22"
+                    HeightRequest="22" />
+
+                <Label
+                    Text="Updating clinic status..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <!-- Error feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Check-in error message" />
+
+            </Border>
+
+            <!-- Success feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#E8F5E9"
+                Stroke="#C8E6C9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasSuccess}">
+
+                <Label
+                    Text="{Binding SuccessMessage}"
+                    FontSize="13"
+                    TextColor="#2E7D32"
+                    LineBreakMode="WordWrap"
+                    AutomationProperties.Name="Check-in success message" />
+
+            </Border>
+
+            <!-- Check-in action -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding CanCheckIn}">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <VerticalStackLayout Spacing="4">
+
+                        <Label
+                            Text="Ready to check in?"
+                            FontSize="17"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="Confirm your arrival at the clinic to join the appointment queue."
+                            FontSize="13"
+                            TextColor="#6B778C"
+                            LineBreakMode="WordWrap" />
+
+                    </VerticalStackLayout>
+
+                    <Button
+                        Text="Check In Now"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        BackgroundColor="#1565C0"
+                        TextColor="White"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        Clicked="OnCheckInClicked"
+                        IsEnabled="{Binding IsNotBusy}"
+                        AutomationProperties.Name="Check in for appointment" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Queue information -->
+            <Border
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasQueueStatus}">
+
+                <VerticalStackLayout Spacing="16">
+
+                    <Grid
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="12">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="3">
+
+                            <Label
+                                Text="Queue Status"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="#172B4D" />
+
+                            <Label
+                                Text="Live information from the clinic queue."
+                                FontSize="12"
+                                TextColor="#6B778C" />
+
+                        </VerticalStackLayout>
+
+                        <Border
+                            Grid.Column="1"
+                            Padding="10,6"
+                            VerticalOptions="Start"
+                            BackgroundColor="#E8F5E9"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 8">
+
+                            <Label
+                                Text="{Binding QueueStatus.Status}"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#2E7D32" />
+
+                        </Border>
+
+                    </Grid>
+
+                    <!-- Queue position -->
+                    <Border
+                        Padding="18"
+                        BackgroundColor="#E3F2FD"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout
+                            Spacing="4"
+                            HorizontalOptions="Center">
+
+                            <Label
+                                Text="YOUR QUEUE POSITION"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#1565C0"
+                                HorizontalTextAlignment="Center" />
+
+                            <Label
+                                Text="{Binding QueueStatus.QueuePosition}"
+                                FontSize="38"
+                                FontAttributes="Bold"
+                                TextColor="#172B4D"
+                                HorizontalTextAlignment="Center" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                    <!-- Queue details -->
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="12">
+
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="3">
+
+                            <Label
+                                Text="Estimated wait"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#6B778C" />
+
+                            <Label
+                                Text="{Binding QueueStatus.EstimatedWaitTime}"
+                                FontSize="15"
+                                FontAttributes="Bold"
+                                TextColor="#172B4D" />
+
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="3">
+
+                            <Label
+                                Text="Checked in"
+                                FontSize="11"
+                                FontAttributes="Bold"
+                                TextColor="#6B778C" />
+
+                            <Label
+                                Text="{Binding QueueStatus.CheckedInAt, StringFormat='{0:HH:mm}'}"
+                                FontSize="15"
+                                FontAttributes="Bold"
+                                TextColor="#172B4D" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                    <Button
+                        Text="Refresh Queue Status"
+                        HeightRequest="46"
+                        CornerRadius="9"
+                        BackgroundColor="#E3F2FD"
+                        TextColor="#1565C0"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        Command="{Binding RefreshQueueCommand}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        AutomationProperties.Name="Refresh queue status" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Queue guidance -->
+            <Border
+                Padding="14"
+                BackgroundColor="#FFF8E1"
+                Stroke="#FFE082"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10"
+                IsVisible="{Binding HasQueueStatus}">
+
+                <Label
+                    Text="Please remain near the clinic waiting area and refresh your queue status for the latest information."
+                    FontSize="12"
+                    TextColor="#795548"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
