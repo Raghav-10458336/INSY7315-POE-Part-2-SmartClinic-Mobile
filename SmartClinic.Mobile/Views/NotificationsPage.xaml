@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="SmartClinic.Mobile.Views.NotificationsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
+    Title="Notifications"
+    BackgroundColor="#F5F8FA">
+
+    <Grid
+        Padding="24,24,24,30"
+        RowDefinitions="Auto,Auto,Auto,*">
+
+        <!-- Page heading and unread count -->
+        <Grid
+            Grid.Row="0"
+            ColumnDefinitions="*,Auto"
+            ColumnSpacing="14">
+
+            <VerticalStackLayout
+                Grid.Column="0"
+                Spacing="5">
+
+                <Label
+                    Text="Notifications"
+                    FontSize="26"
+                    FontAttributes="Bold"
+                    TextColor="#172B4D" />
+
+                <Label
+                    Text="Appointment reminders, confirmations and clinic updates."
+                    FontSize="14"
+                    TextColor="#6B778C"
+                    LineBreakMode="WordWrap" />
+
+            </VerticalStackLayout>
+
+            <Border
+                Grid.Column="1"
+                Padding="11,7"
+                VerticalOptions="Start"
+                BackgroundColor="#E3F2FD"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10"
+                IsVisible="{Binding HasUnreadNotifications}">
+
+                <HorizontalStackLayout Spacing="5">
+
+                    <Label
+                        Text="{Binding UnreadCount}"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        TextColor="#1565C0" />
+
+                    <Label
+                        Text="unread"
+                        FontSize="13"
+                        TextColor="#1565C0" />
+
+                </HorizontalStackLayout>
+
+            </Border>
+
+        </Grid>
+
+        <!-- Notification actions -->
+        <Grid
+            Grid.Row="1"
+            Margin="0,18,0,0"
+            ColumnDefinitions="*,Auto"
+            ColumnSpacing="12">
+
+            <Label
+                Grid.Column="0"
+                Text="Recent notifications"
+                FontSize="17"
+                FontAttributes="Bold"
+                TextColor="#172B4D"
+                VerticalTextAlignment="Center" />
+
+            <Button
+                Grid.Column="1"
+                Text="Mark All Read"
+                HeightRequest="40"
+                Padding="14,0"
+                CornerRadius="8"
+                BackgroundColor="#E3F2FD"
+                TextColor="#1565C0"
+                FontSize="12"
+                FontAttributes="Bold"
+                IsVisible="{Binding HasUnreadNotifications}"
+                Command="{Binding MarkAllAsReadCommand}"
+                SemanticProperties.Description="Mark all notifications as read" />
+
+        </Grid>
+
+        <!-- Loading and feedback -->
+        <VerticalStackLayout
+            Grid.Row="2"
+            Margin="0,14,0,0"
+            Spacing="10">
+
+            <HorizontalStackLayout
+                Spacing="10"
+                IsVisible="{Binding IsBusy}">
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    WidthRequest="22"
+                    HeightRequest="22"
+                    Color="#1565C0" />
+
+                <Label
+                    Text="Loading notifications..."
+                    FontSize="13"
+                    TextColor="#6B778C"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <!-- Error feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#FFEBEE"
+                Stroke="#FFCDD2"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasError}">
+
+                <Label
+                    Text="{Binding ErrorMessage}"
+                    FontSize="13"
+                    TextColor="#B71C1C"
+                    LineBreakMode="WordWrap"
+                    SemanticProperties.Description="Notification error message" />
+
+            </Border>
+
+            <!-- Success feedback -->
+            <Border
+                Padding="12"
+                BackgroundColor="#E8F5E9"
+                Stroke="#C8E6C9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                IsVisible="{Binding HasSuccess}">
+
+                <Label
+                    Text="{Binding SuccessMessage}"
+                    FontSize="13"
+                    TextColor="#2E7D32"
+                    LineBreakMode="WordWrap"
+                    SemanticProperties.Description="Notification success message" />
+
+            </Border>
+
+        </VerticalStackLayout>
+
+        <!-- Notification content -->
+        <Grid
+            Grid.Row="3"
+            Margin="0,16,0,0">
+
+            <!-- Empty state -->
+            <Border
+                Padding="26"
+                VerticalOptions="Start"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14"
+                IsVisible="{Binding HasNoNotifications}">
+
+                <VerticalStackLayout
+                    Spacing="10"
+                    HorizontalOptions="Center">
+
+                    <Label
+                        Text="🔔"
+                        FontSize="34"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="You're all caught up"
+                        FontSize="17"
+                        FontAttributes="Bold"
+                        TextColor="#172B4D"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Appointment reminders, confirmations and clinic updates will appear here."
+                        FontSize="13"
+                        TextColor="#6B778C"
+                        HorizontalTextAlignment="Center"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- Notification list -->
+            <CollectionView
+                ItemsSource="{Binding Notifications}"
+                IsVisible="{Binding HasNotifications}"
+                SelectionMode="None">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Vertical"
+                        ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Notification">
+
+                        <Border
+                            Padding="16"
+                            BackgroundColor="White"
+                            Stroke="#D9E2EC"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14">
+
+                            <VerticalStackLayout Spacing="10">
+
+                                <!-- Notification type and date -->
+                                <Grid
+                                    ColumnDefinitions="*,Auto"
+                                    ColumnSpacing="12">
+
+                                    <HorizontalStackLayout
+                                        Grid.Column="0"
+                                        Spacing="8">
+
+                                        <Border
+                                            Padding="8,4"
+                                            BackgroundColor="#E3F2FD"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 7">
+
+                                            <Label
+                                                Text="{Binding Type}"
+                                                FontSize="10"
+                                                FontAttributes="Bold"
+                                                TextColor="#1565C0" />
+
+                                        </Border>
+
+                                        <!-- Unread indicator -->
+                                        <Border
+                                            WidthRequest="9"
+                                            HeightRequest="9"
+                                            BackgroundColor="#1565C0"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 5"
+                                            IsVisible="{Binding IsRead, Converter={StaticResource InvertedBoolConverter}}" />
+
+                                    </HorizontalStackLayout>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding CreatedAt, StringFormat='{0:dd MMM yyyy HH:mm}'}"
+                                        FontSize="11"
+                                        TextColor="#6B778C"
+                                        VerticalTextAlignment="Center" />
+
+                                </Grid>
+
+                                <!-- Notification content -->
+                                <Label
+                                    Text="{Binding Title}"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    TextColor="#172B4D"
+                                    LineBreakMode="WordWrap" />
+
+                                <Label
+                                    Text="{Binding Message}"
+                                    FontSize="13"
+                                    TextColor="#44546A"
+                                    LineHeight="1.2"
+                                    LineBreakMode="WordWrap" />
+
+                                <!-- Individual read action -->
+                                <Button
+                                    Text="Mark as Read"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    BackgroundColor="#F1F5F9"
+                                    TextColor="#1565C0"
+                                    FontSize="12"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Start"
+                                    Padding="14,0"
+                                    IsVisible="{Binding IsRead, Converter={StaticResource InvertedBoolConverter}}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkAsReadCommand}"
+                                    CommandParameter="{Binding .}"
+                                    SemanticProperties.Description="Mark this notification as read" />
+
+                                <!-- Read status -->
+                                <Label
+                                    Text="Read"
+                                    FontSize="11"
+                                    FontAttributes="Bold"
+                                    TextColor="#2E7D32"
+                                    IsVisible="{Binding IsRead}" />
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

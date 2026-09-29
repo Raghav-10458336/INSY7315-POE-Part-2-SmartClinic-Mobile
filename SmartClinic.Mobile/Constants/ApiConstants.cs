@@ -31,4 +31,10 @@ public static class ApiConstants
     public const string ConsultationDetailsEndpoint = "/api/consultations/{0}";
     public const string PrescriptionsEndpoint = "/api/prescriptions";
     public const string ConsultationPrescriptionsEndpoint = "/api/consultations/{0}/prescriptions";
+
+    // Notification endpoints for the authenticated patient.
+    public const string NotificationsEndpoint = "/api/notifications";
+    public const string UnreadNotificationsEndpoint = "/api/notifications/unread";
+    public const string MarkNotificationReadEndpoint = "/api/notifications/{0}/read";
+    public const string MarkAllNotificationsReadEndpoint = "/api/notifications/read-all";
 }

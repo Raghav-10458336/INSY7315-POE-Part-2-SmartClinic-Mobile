@@ -40,6 +40,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddSingleton<IDoctorService, DoctorService>();
             builder.Services.AddSingleton<IQueueService, QueueService>();
             builder.Services.AddSingleton<IClinicalService, ClinicalService>();
+            builder.Services.AddSingleton<INotificationService, NotificationService>();
 
             // Register authentication ViewModels used by the mobile interface.
             builder.Services.AddTransient<LoginViewModel>();
@@ -52,6 +53,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<ConsultationHistoryViewModel>();
             builder.Services.AddTransient<ConsultationDetailsViewModel>();
             builder.Services.AddTransient<PrescriptionsViewModel>();
+            builder.Services.AddTransient<NotificationsViewModel>();
 
             // Register authentication pages for dependency injection.
             builder.Services.AddTransient<LoginPage>();
@@ -64,6 +66,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<ConsultationHistoryPage>();
             builder.Services.AddTransient<ConsultationDetailsPage>();
             builder.Services.AddTransient<PrescriptionsPage>();
+            builder.Services.AddTransient<NotificationsPage>();
 
 
 
