@@ -340,6 +340,11 @@
 
                     </VerticalStackLayout>
 
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnPrescriptionsTapped" />
+                    </Border.GestureRecognizers>
+
                 </Border>
 
                 <!-- Consultation history -->
@@ -372,6 +377,11 @@
                             TextColor="#6B778C" />
 
                     </VerticalStackLayout>
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnConsultationHistoryTapped" />
+                    </Border.GestureRecognizers>
 
                 </Border>
 

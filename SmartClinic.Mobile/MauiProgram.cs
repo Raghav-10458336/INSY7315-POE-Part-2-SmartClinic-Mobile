@@ -51,6 +51,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<CheckInQueueViewModel>();
             builder.Services.AddTransient<ConsultationHistoryViewModel>();
             builder.Services.AddTransient<ConsultationDetailsViewModel>();
+            builder.Services.AddTransient<PrescriptionsViewModel>();
 
             // Register authentication pages for dependency injection.
             builder.Services.AddTransient<LoginPage>();
@@ -62,6 +63,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<CheckInQueuePage>();
             builder.Services.AddTransient<ConsultationHistoryPage>();
             builder.Services.AddTransient<ConsultationDetailsPage>();
+            builder.Services.AddTransient<PrescriptionsPage>();
 
 
 

@@ -47,4 +47,32 @@ public partial class PatientDashboardPage : ContentPage
             await Navigation.PushAsync(bookingPage);
         }
     }
+
+    private async void OnPrescriptionsTapped(
+    object? sender,
+    TappedEventArgs e)
+    {
+        // Open the authenticated patient's prescription history.
+        var prescriptionsPage = Handler?.MauiContext?.Services
+            .GetService<PrescriptionsPage>();
+
+        if (prescriptionsPage is not null)
+        {
+            await Navigation.PushAsync(prescriptionsPage);
+        }
+    }
+
+    private async void OnConsultationHistoryTapped(
+        object? sender,
+        TappedEventArgs e)
+    {
+        // Open the authenticated patient's consultation history.
+        var historyPage = Handler?.MauiContext?.Services
+            .GetService<ConsultationHistoryPage>();
+
+        if (historyPage is not null)
+        {
+            await Navigation.PushAsync(historyPage);
+        }
+    }
 }
