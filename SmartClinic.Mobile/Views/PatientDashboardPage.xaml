@@ -387,6 +387,73 @@
 
             </Grid>
 
+            <!-- Notifications -->
+            <Border
+                Margin="0,12,0,0"
+                Padding="16"
+                MinimumHeightRequest="88"
+                BackgroundColor="White"
+                Stroke="#D9E2EC"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+
+                <Grid
+                    ColumnDefinitions="Auto,*,Auto"
+                    ColumnSpacing="14">
+
+                    <Border
+                        Grid.Column="0"
+                        WidthRequest="46"
+                        HeightRequest="46"
+                        VerticalOptions="Center"
+                        BackgroundColor="#E3F2FD"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12">
+
+                        <Label
+                            Text="🔔"
+                            FontSize="22"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            AutomationProperties.Name="Notifications" />
+
+                    </Border>
+
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="4"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Text="Notifications"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#172B4D" />
+
+                        <Label
+                            Text="Reminders, confirmations and clinic updates"
+                            FontSize="12"
+                            TextColor="#6B778C"
+                            LineBreakMode="WordWrap" />
+
+                    </VerticalStackLayout>
+
+                    <Label
+                        Grid.Column="2"
+                        Text="›"
+                        FontSize="28"
+                        TextColor="#1565C0"
+                        VerticalTextAlignment="Center" />
+
+                </Grid>
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="OnNotificationsTapped" />
+                </Border.GestureRecognizers>
+
+            </Border>
+
             <!-- Queue status -->
             <Label
                 Text="Clinic status"

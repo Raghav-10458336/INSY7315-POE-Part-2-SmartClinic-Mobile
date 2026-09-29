@@ -24,7 +24,9 @@ public partial class PatientDashboardPage : ContentPage
         await _viewModel.LoadDashboardAsync();
     }
 
-    private async void OnAppointmentsTapped(object? sender, TappedEventArgs e)
+    private async void OnAppointmentsTapped(
+        object? sender,
+        TappedEventArgs e)
     {
         // Resolve the appointments page through dependency injection.
         var appointmentsPage = Handler?.MauiContext?.Services
@@ -36,7 +38,9 @@ public partial class PatientDashboardPage : ContentPage
         }
     }
 
-    private async void OnBookAppointmentClicked(object? sender, EventArgs e)
+    private async void OnBookAppointmentClicked(
+        object? sender,
+        EventArgs e)
     {
         // Resolve the booking page through dependency injection.
         var bookingPage = Handler?.MauiContext?.Services
@@ -49,8 +53,8 @@ public partial class PatientDashboardPage : ContentPage
     }
 
     private async void OnPrescriptionsTapped(
-    object? sender,
-    TappedEventArgs e)
+        object? sender,
+        TappedEventArgs e)
     {
         // Open the authenticated patient's prescription history.
         var prescriptionsPage = Handler?.MauiContext?.Services
@@ -73,6 +77,20 @@ public partial class PatientDashboardPage : ContentPage
         if (historyPage is not null)
         {
             await Navigation.PushAsync(historyPage);
+        }
+    }
+
+    private async void OnNotificationsTapped(
+        object? sender,
+        TappedEventArgs e)
+    {
+        // Open the authenticated patient's notifications and reminders.
+        var notificationsPage = Handler?.MauiContext?.Services
+            .GetService<NotificationsPage>();
+
+        if (notificationsPage is not null)
+        {
+            await Navigation.PushAsync(notificationsPage);
         }
     }
 }
