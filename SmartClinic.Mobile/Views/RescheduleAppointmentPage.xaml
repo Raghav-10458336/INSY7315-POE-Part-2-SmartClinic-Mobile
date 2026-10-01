@@ -6,93 +6,119 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
     Title="Reschedule Appointment"
-    BackgroundColor="#F5F8FA">
+    BackgroundColor="{StaticResource PageBackground}">
 
     <ScrollView>
         <VerticalStackLayout
             Padding="24,24,24,40"
-            Spacing="18">
+            Spacing="0"
+            MaximumWidthRequest="620"
+            HorizontalOptions="Center">
 
             <!-- Page heading -->
-            <VerticalStackLayout Spacing="5">
+            <Label
+                Text="Reschedule Appointment"
+                Style="{StaticResource PageTitleStyle}"
+                SemanticProperties.HeadingLevel="Level1" />
 
-                <Label
-                    Text="Reschedule Appointment"
-                    FontSize="26"
-                    FontAttributes="Bold"
-                    TextColor="#172B4D" />
-
-                <Label
-                    Text="Choose a new available time for your appointment."
-                    FontSize="14"
-                    TextColor="#6B778C"
-                    LineBreakMode="WordWrap" />
-
-            </VerticalStackLayout>
+            <Label
+                Text="Choose a new available time for your appointment."
+                Margin="0,5,0,0"
+                Style="{StaticResource PageSubtitleStyle}"
+                LineBreakMode="WordWrap" />
 
             <!-- Current appointment -->
-            <Border
-                Padding="16"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 12">
+            <Label
+                Text="Current appointment"
+                Margin="0,28,0,10"
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-                <VerticalStackLayout Spacing="10">
+            <Border Style="{StaticResource CardStyle}">
 
-                    <Label
-                        Text="Current Appointment"
-                        FontSize="12"
-                        FontAttributes="Bold"
-                        TextColor="#6B778C" />
-
-                    <Label
-                        Text="{Binding Appointment.DoctorName}"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        TextColor="#172B4D" />
-
-                    <Label
-                        Text="{Binding Appointment.DoctorSpecialisation}"
-                        FontSize="13"
-                        TextColor="#1565C0" />
+                <VerticalStackLayout Spacing="12">
 
                     <Grid
-                        Margin="0,4,0,0"
+                        ColumnDefinitions="Auto,*"
+                        ColumnSpacing="13">
+
+                        <Border
+                            Grid.Column="0"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            VerticalOptions="Start"
+                            BackgroundColor="{StaticResource PrimaryLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12">
+
+                            <Label
+                                Text="DR"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="12"
+                                TextColor="{StaticResource Primary}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="3"
+                            VerticalOptions="Center">
+
+                            <Label
+                                Text="{Binding Appointment.DoctorName}"
+                                Style="{StaticResource CardTitleStyle}"
+                                FontSize="17" />
+
+                            <Label
+                                Text="{Binding Appointment.DoctorSpecialisation}"
+                                FontSize="13"
+                                TextColor="{StaticResource Primary}" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                    <BoxView
+                        HeightRequest="1"
+                        BackgroundColor="{StaticResource Divider}" />
+
+                    <Grid
                         ColumnDefinitions="*,*"
                         ColumnSpacing="12">
 
                         <VerticalStackLayout
                             Grid.Column="0"
-                            Spacing="2">
+                            Spacing="3">
 
                             <Label
-                                Text="Current date"
+                                Text="CURRENT DATE"
+                                FontFamily="OpenSansSemibold"
                                 FontSize="11"
-                                FontAttributes="Bold"
-                                TextColor="#6B778C" />
+                                TextColor="{StaticResource TextSecondary}" />
 
                             <Label
                                 Text="{Binding Appointment.AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
                                 FontSize="14"
-                                TextColor="#172B4D" />
+                                TextColor="{StaticResource TextPrimary}" />
 
                         </VerticalStackLayout>
 
                         <VerticalStackLayout
                             Grid.Column="1"
-                            Spacing="2">
+                            Spacing="3">
 
                             <Label
-                                Text="Current time"
+                                Text="CURRENT TIME"
+                                FontFamily="OpenSansSemibold"
                                 FontSize="11"
-                                FontAttributes="Bold"
-                                TextColor="#6B778C" />
+                                TextColor="{StaticResource TextSecondary}" />
 
                             <Label
                                 Text="{Binding Appointment.AppointmentDateTime, StringFormat='{0:HH:mm}'}"
                                 FontSize="14"
-                                TextColor="#172B4D" />
+                                TextColor="{StaticResource TextPrimary}" />
 
                         </VerticalStackLayout>
 
@@ -104,156 +130,216 @@
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
+                Margin="0,18,0,0"
                 Spacing="10"
                 IsVisible="{Binding IsBusy}">
 
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
-                    Color="#1565C0"
                     WidthRequest="22"
                     HeightRequest="22" />
 
                 <Label
                     Text="Updating appointment..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Updating appointment" />
 
             </HorizontalStackLayout>
 
             <!-- Error feedback -->
             <Border
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Margin="0,18,0,0"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Reschedule appointment error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Reschedule appointment error message" />
+
+                </Grid>
 
             </Border>
 
             <!-- New appointment time -->
-            <VerticalStackLayout Spacing="8">
+            <Label
+                Text="Select a new time"
+                Margin="0,28,0,6"
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-                <Label
-                    Text="Select a new time"
-                    FontSize="15"
-                    FontAttributes="Bold"
-                    TextColor="#172B4D" />
+            <Label
+                Text="Available times for your current doctor are shown below."
+                Style="{StaticResource MutedTextStyle}"
+                LineBreakMode="WordWrap" />
 
-                <Label
-                    Text="Available times for your current doctor are shown below."
-                    FontSize="12"
-                    TextColor="#6B778C"
-                    LineBreakMode="WordWrap" />
+            <CollectionView
+                Margin="0,12,0,0"
+                ItemsSource="{Binding AvailableSlots}"
+                IsVisible="{Binding HasAvailableSlots}"
+                SelectedItem="{Binding SelectedSlot}"
+                SelectionMode="Single"
+                HeightRequest="230">
 
-                <CollectionView
-                    ItemsSource="{Binding AvailableSlots}"
-                    IsVisible="{Binding HasAvailableSlots}"
-                    SelectedItem="{Binding SelectedSlot}"
-                    SelectionMode="Single"
-                    HeightRequest="230">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Vertical"
+                        ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
 
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout
-                            Orientation="Vertical"
-                            ItemSpacing="8" />
-                    </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DoctorAvailability">
 
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:DoctorAvailability">
+                        <Border
+                            Padding="14"
+                            BackgroundColor="{StaticResource Surface}"
+                            Stroke="{StaticResource Border}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10">
 
-                            <Border
-                                Padding="14"
-                                BackgroundColor="White"
-                                Stroke="#D9E2EC"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10">
+                            <Grid
+                                ColumnDefinitions="*,Auto"
+                                ColumnSpacing="12">
 
-                                <Grid
-                                    ColumnDefinitions="*,Auto"
-                                    ColumnSpacing="12">
-
-                                    <VerticalStackLayout
-                                        Grid.Column="0"
-                                        Spacing="3">
-
-                                        <Label
-                                            Text="{Binding StartDateTime, StringFormat='{0:dddd, dd MMM yyyy}'}"
-                                            FontSize="14"
-                                            FontAttributes="Bold"
-                                            TextColor="#172B4D" />
-
-                                        <Label
-                                            Text="{Binding StartDateTime, StringFormat='{0:HH:mm}'}"
-                                            FontSize="13"
-                                            TextColor="#1565C0" />
-
-                                    </VerticalStackLayout>
+                                <VerticalStackLayout
+                                    Grid.Column="0"
+                                    Spacing="3">
 
                                     <Label
-                                        Grid.Column="1"
+                                        Text="{Binding StartDateTime, StringFormat='{0:dddd, dd MMM yyyy}'}"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="14"
+                                        TextColor="{StaticResource TextPrimary}" />
+
+                                    <Label
+                                        Text="{Binding StartDateTime, StringFormat='{0:HH:mm}'}"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="13"
+                                        TextColor="{StaticResource Primary}" />
+
+                                </VerticalStackLayout>
+
+                                <Border
+                                    Grid.Column="1"
+                                    Padding="9,5"
+                                    VerticalOptions="Center"
+                                    BackgroundColor="{StaticResource SuccessLight}"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8">
+
+                                    <Label
                                         Text="Available"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        TextColor="#2E7D32"
-                                        VerticalTextAlignment="Center" />
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="10"
+                                        TextColor="{StaticResource Success}" />
 
-                                </Grid>
+                                </Border>
 
-                            </Border>
+                            </Grid>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                        </Border>
 
-                </CollectionView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-            </VerticalStackLayout>
+            </CollectionView>
+
+            <!-- Selection guidance -->
+            <Border
+                Margin="0,12,0,0"
+                Padding="12"
+                BackgroundColor="{StaticResource InfoLight}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10">
+
+                <Label
+                    Text="Select your preferred replacement time before confirming the change."
+                    FontSize="12"
+                    TextColor="{StaticResource Info}"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
 
             <!-- Success feedback -->
             <Border
-                Padding="12"
-                BackgroundColor="#E8F5E9"
-                Stroke="#C8E6C9"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Margin="0,18,0,0"
+                Style="{StaticResource SuccessBannerStyle}"
                 IsVisible="{Binding HasSuccess}">
 
-                <Label
-                    Text="{Binding SuccessMessage}"
-                    FontSize="13"
-                    TextColor="#2E7D32"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Reschedule appointment success message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Success}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding SuccessMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Success}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Reschedule appointment success message" />
+
+                </Grid>
 
             </Border>
 
             <!-- Confirm action -->
             <Button
                 Text="Confirm New Appointment Time"
-                HeightRequest="50"
-                CornerRadius="10"
-                BackgroundColor="#1565C0"
-                TextColor="White"
-                FontSize="15"
-                FontAttributes="Bold"
+                Margin="0,24,0,0"
+                Style="{StaticResource PrimaryButtonStyle}"
                 Command="{Binding RescheduleAppointmentCommand}"
                 IsEnabled="{Binding IsNotBusy}"
                 SemanticProperties.Description="Confirm new appointment time" />
 
-            <Label
-                Text="Your existing appointment remains unchanged until the new time is successfully confirmed."
-                FontSize="11"
-                TextColor="#6B778C"
-                HorizontalTextAlignment="Center"
-                LineBreakMode="WordWrap" />
+            <!-- Reassurance -->
+            <Border
+                Margin="0,14,0,0"
+                Padding="12"
+                BackgroundColor="{StaticResource SurfaceMuted}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10">
+
+                <Label
+                    Text="Your existing appointment remains unchanged until the new time is successfully confirmed."
+                    Style="{StaticResource MutedTextStyle}"
+                    FontSize="11"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
+            <!-- Clinic brand accent -->
+            <BoxView
+                Margin="0,26,0,0"
+                WidthRequest="42"
+                HeightRequest="3"
+                CornerRadius="2"
+                BackgroundColor="{StaticResource Secondary}"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>
