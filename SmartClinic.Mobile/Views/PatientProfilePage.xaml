@@ -5,29 +5,26 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="My Profile"
-    BackgroundColor="#F5F8FA">
+    BackgroundColor="{StaticResource PageBackground}">
 
     <ScrollView>
         <VerticalStackLayout
             Padding="24,24,24,40"
-            Spacing="0">
+            Spacing="0"
+            MaximumWidthRequest="620"
+            HorizontalOptions="Center">
 
             <!-- Profile heading -->
-            <VerticalStackLayout Spacing="5">
+            <Label
+                Text="My Profile"
+                Style="{StaticResource PageTitleStyle}"
+                SemanticProperties.HeadingLevel="Level1" />
 
-                <Label
-                    Text="My Profile"
-                    FontSize="26"
-                    FontAttributes="Bold"
-                    TextColor="#172B4D" />
-
-                <Label
-                    Text="View and manage your personal and healthcare information."
-                    FontSize="14"
-                    TextColor="#6B778C"
-                    LineBreakMode="WordWrap" />
-
-            </VerticalStackLayout>
+            <Label
+                Text="View and manage your personal and healthcare information."
+                Margin="0,5,0,0"
+                Style="{StaticResource PageSubtitleStyle}"
+                LineBreakMode="WordWrap" />
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
@@ -38,63 +35,80 @@
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
                     WidthRequest="22"
-                    HeightRequest="22"
-                    Color="#1565C0" />
+                    HeightRequest="22" />
 
                 <Label
                     Text="Loading your profile..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Loading patient profile" />
 
             </HorizontalStackLayout>
 
             <!-- Error feedback -->
             <Border
                 Margin="0,16,0,0"
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Profile error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Profile error message" />
+
+                </Grid>
 
             </Border>
 
             <!-- Success feedback -->
             <Border
                 Margin="0,16,0,0"
-                Padding="12"
-                BackgroundColor="#E8F5E9"
-                Stroke="#C8E6C9"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource SuccessBannerStyle}"
                 IsVisible="{Binding HasSuccess}">
 
-                <Label
-                    Text="{Binding SuccessMessage}"
-                    FontSize="13"
-                    TextColor="#2E7D32"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Profile success message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Success}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding SuccessMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Success}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Profile success message" />
+
+                </Grid>
 
             </Border>
 
             <!-- Patient summary -->
             <Border
                 Margin="0,22,0,0"
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+                Style="{StaticResource CardStyle}">
 
                 <Grid
                     ColumnDefinitions="Auto,*"
@@ -103,13 +117,15 @@
                     <Border
                         WidthRequest="58"
                         HeightRequest="58"
-                        BackgroundColor="#E3F2FD"
+                        BackgroundColor="{StaticResource PrimaryLight}"
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 16">
 
                         <Label
-                            Text="👤"
-                            FontSize="27"
+                            Text="ME"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="14"
+                            TextColor="{StaticResource Primary}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             SemanticProperties.Description="Patient profile" />
@@ -123,14 +139,13 @@
 
                         <Label
                             Text="{Binding Patient.FullName}"
-                            FontSize="18"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="18" />
 
                         <Label
                             Text="{Binding Patient.Email}"
+                            Style="{StaticResource MutedTextStyle}"
                             FontSize="13"
-                            TextColor="#6B778C"
                             LineBreakMode="TailTruncation" />
 
                     </VerticalStackLayout>
@@ -143,73 +158,79 @@
             <Label
                 Text="Personal information"
                 Margin="0,28,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-            <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+            <Border Style="{StaticResource CardStyle}">
 
-                <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout Spacing="16">
 
+                    <!-- First name -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="First name"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.FirstName}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Placeholder="First name"
-                            SemanticProperties.Description="Patient first name" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.FirstName}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Placeholder="First name"
+                                SemanticProperties.Description="Patient first name" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Last name -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Last name"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.LastName}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Placeholder="Last name"
-                            SemanticProperties.Description="Patient last name" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.LastName}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Placeholder="Last name"
+                                SemanticProperties.Description="Patient last name" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Date of birth -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Date of birth"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <DatePicker
-                            Date="{Binding Patient.DateOfBirth}"
-                            IsEnabled="{Binding IsEditing}"
-                            Format="dd MMM yyyy"
-                            SemanticProperties.Description="Patient date of birth" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <DatePicker
+                                Date="{Binding Patient.DateOfBirth}"
+                                IsEnabled="{Binding IsEditing}"
+                                Format="dd MMM yyyy"
+                                SemanticProperties.Description="Patient date of birth" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Gender -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Gender"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.Gender}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Placeholder="Gender"
-                            SemanticProperties.Description="Patient gender" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.Gender}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Placeholder="Gender"
+                                SemanticProperties.Description="Patient gender" />
+                        </Border>
+
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
@@ -220,63 +241,66 @@
             <Label
                 Text="Contact information"
                 Margin="0,28,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-            <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+            <Border Style="{StaticResource CardStyle}">
 
-                <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout Spacing="16">
 
+                    <!-- Email -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Email address"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.Email}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Keyboard="Email"
-                            Placeholder="Email address"
-                            SemanticProperties.Description="Patient email address" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.Email}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Keyboard="Email"
+                                Placeholder="Email address"
+                                SemanticProperties.Description="Patient email address" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Phone -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Phone number"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.PhoneNumber}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Keyboard="Telephone"
-                            Placeholder="Phone number"
-                            SemanticProperties.Description="Patient phone number" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.PhoneNumber}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Keyboard="Telephone"
+                                Placeholder="Phone number"
+                                SemanticProperties.Description="Patient phone number" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Address -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Address"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Editor
-                            Text="{Binding Patient.Address}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            AutoSize="TextChanges"
-                            MinimumHeightRequest="80"
-                            Placeholder="Residential address"
-                            SemanticProperties.Description="Patient residential address" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Editor
+                                Text="{Binding Patient.Address}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                AutoSize="TextChanges"
+                                MinimumHeightRequest="80"
+                                Placeholder="Residential address"
+                                SemanticProperties.Description="Patient residential address" />
+                        </Border>
+
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
@@ -287,46 +311,46 @@
             <Label
                 Text="Emergency contact"
                 Margin="0,28,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-            <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+            <Border Style="{StaticResource CardStyle}">
 
-                <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout Spacing="16">
 
+                    <!-- Emergency contact name -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Contact name"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.EmergencyContactName}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Placeholder="Emergency contact name"
-                            SemanticProperties.Description="Emergency contact name" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.EmergencyContactName}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Placeholder="Emergency contact name"
+                                SemanticProperties.Description="Emergency contact name" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Emergency contact number -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Contact number"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.EmergencyContactNumber}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Keyboard="Telephone"
-                            Placeholder="Emergency contact number"
-                            SemanticProperties.Description="Emergency contact number" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.EmergencyContactNumber}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Keyboard="Telephone"
+                                Placeholder="Emergency contact number"
+                                SemanticProperties.Description="Emergency contact number" />
+                        </Border>
+
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
@@ -337,45 +361,45 @@
             <Label
                 Text="Medical aid"
                 Margin="0,28,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-            <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+            <Border Style="{StaticResource CardStyle}">
 
-                <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout Spacing="16">
 
+                    <!-- Medical aid provider -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Provider"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.MedicalAidProvider}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Placeholder="Medical aid provider"
-                            SemanticProperties.Description="Medical aid provider" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.MedicalAidProvider}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Placeholder="Medical aid provider"
+                                SemanticProperties.Description="Medical aid provider" />
+                        </Border>
+
                     </VerticalStackLayout>
 
+                    <!-- Medical aid membership number -->
                     <VerticalStackLayout Spacing="6">
+
                         <Label
                             Text="Membership number"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource FieldLabelStyle}" />
 
-                        <Entry
-                            Text="{Binding Patient.MedicalAidNumber}"
-                            IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
-                            Placeholder="Membership number"
-                            SemanticProperties.Description="Medical aid membership number" />
+                        <Border Style="{StaticResource InputBorderStyle}">
+                            <Entry
+                                Text="{Binding Patient.MedicalAidNumber}"
+                                IsReadOnly="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
+                                Placeholder="Membership number"
+                                SemanticProperties.Description="Medical aid membership number" />
+                        </Border>
+
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
@@ -386,11 +410,7 @@
             <Button
                 Text="Edit Profile"
                 Margin="0,28,0,0"
-                HeightRequest="50"
-                CornerRadius="10"
-                BackgroundColor="#1565C0"
-                TextColor="White"
-                FontAttributes="Bold"
+                Style="{StaticResource PrimaryButtonStyle}"
                 IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"
                 Command="{Binding EditProfileCommand}"
                 SemanticProperties.Description="Edit patient profile" />
@@ -405,26 +425,44 @@
                 <Button
                     Grid.Column="0"
                     Text="Cancel"
-                    HeightRequest="50"
-                    CornerRadius="10"
-                    BackgroundColor="#E9EEF5"
-                    TextColor="#44546A"
-                    FontAttributes="Bold"
+                    Style="{StaticResource SecondaryButtonStyle}"
                     Command="{Binding CancelEditCommand}"
                     SemanticProperties.Description="Cancel profile changes" />
 
                 <Button
                     Grid.Column="1"
                     Text="Save Changes"
-                    HeightRequest="50"
-                    CornerRadius="10"
-                    BackgroundColor="#1565C0"
-                    TextColor="White"
-                    FontAttributes="Bold"
+                    Style="{StaticResource PrimaryButtonStyle}"
                     Command="{Binding SaveProfileCommand}"
                     SemanticProperties.Description="Save profile changes" />
 
             </Grid>
+
+            <!-- Privacy reassurance -->
+            <Border
+                Margin="0,18,0,0"
+                Padding="12"
+                BackgroundColor="{StaticResource SurfaceMuted}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10">
+
+                <Label
+                    Text="Your profile information is used to support your care and clinic services."
+                    Style="{StaticResource MutedTextStyle}"
+                    FontSize="11"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
+            <!-- Clinic brand accent -->
+            <BoxView
+                Margin="0,26,0,0"
+                WidthRequest="42"
+                HeightRequest="3"
+                CornerRadius="2"
+                BackgroundColor="{StaticResource Secondary}"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>
