@@ -6,180 +6,149 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     Title="Create Account"
-    BackgroundColor="#F5F8FA"
-    Shell.NavBarIsVisible="False">
+    BackgroundColor="{StaticResource PageBackground}"
+    Shell.NavBarIsVisible="False"
+    NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="28,45,28,40"
-            Spacing="0">
+            Padding="28,32,28,36"
+            Spacing="0"
+            MaximumWidthRequest="520"
+            HorizontalOptions="Center">
+
+            <!-- Official clinic branding -->
+            <Image
+                Source="smartclinic_logo.png"
+                WidthRequest="150"
+                HeightRequest="84"
+                Aspect="AspectFit"
+                HorizontalOptions="Center"
+                SemanticProperties.Description="Doringkloof Medical Centre logo" />
+
+            <Label
+                Text="SmartClinic"
+                Margin="0,6,0,0"
+                FontFamily="OpenSansSemibold"
+                FontSize="24"
+                TextColor="{StaticResource PrimaryDark}"
+                HorizontalTextAlignment="Center" />
+
+            <Label
+                Text="Doringkloof Medical Centre"
+                Margin="0,3,0,0"
+                Style="{StaticResource MutedTextStyle}"
+                HorizontalTextAlignment="Center" />
 
             <!-- Page heading -->
-            <Label
-                Text="Create your account"
-                FontSize="28"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+            <VerticalStackLayout
+                Margin="0,30,0,0"
+                Spacing="7">
 
+                <Label
+                    Text="Create your account"
+                    Style="{StaticResource PageTitleStyle}"
+                    FontSize="24"
+                    SemanticProperties.HeadingLevel="Level1" />
+
+                <Label
+                    Text="Register for secure access to your appointments and healthcare information."
+                    Style="{StaticResource PageSubtitleStyle}"
+                    LineHeight="1.25" />
+
+            </VerticalStackLayout>
+
+            <!-- Personal information -->
             <Label
-                Text="Register for secure access to your appointments and healthcare information."
-                Margin="0,8,0,28"
-                FontSize="14"
-                TextColor="#6B778C"
-                LineHeight="1.25" />
+                Text="Personal information"
+                Margin="0,26,0,14"
+                Style="{StaticResource SectionTitleStyle}"
+                FontSize="17"
+                SemanticProperties.HeadingLevel="Level2" />
 
             <!-- First name -->
             <Label
                 Text="First name"
                 Margin="0,0,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding FirstName}"
                     Placeholder="Enter your first name"
                     ReturnType="Next"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="First name" />
             </Border>
 
             <!-- Last name -->
             <Label
                 Text="Last name"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,17,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding LastName}"
                     Placeholder="Enter your last name"
                     ReturnType="Next"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Last name" />
             </Border>
 
             <!-- Email -->
             <Label
                 Text="Email address"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,17,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding Email}"
                     Placeholder="Enter your email address"
                     Keyboard="Email"
+                    ClearButtonVisibility="WhileEditing"
                     ReturnType="Next"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Email address" />
             </Border>
 
             <!-- Phone number -->
             <Label
                 Text="Phone number"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,17,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding PhoneNumber}"
                     Placeholder="Enter your phone number"
                     Keyboard="Telephone"
                     ReturnType="Next"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Phone number" />
             </Border>
 
             <!-- Date of birth -->
             <Label
                 Text="Date of birth"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,17,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <DatePicker
                     Date="{Binding DateOfBirth}"
                     MaximumDate="{x:Static sys:DateTime.Today}"
                     Format="dd MMMM yyyy"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Date of birth" />
             </Border>
 
             <!-- Gender -->
             <Label
                 Text="Gender"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,17,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Picker
                     Title="Select gender"
                     SelectedItem="{Binding Gender}"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Gender">
 
                     <Picker.Items>
@@ -188,158 +157,194 @@
                         <x:String>Other</x:String>
                         <x:String>Prefer not to say</x:String>
                     </Picker.Items>
+
                 </Picker>
             </Border>
+
+            <!-- Account security -->
+            <Label
+                Text="Account security"
+                Margin="0,28,0,5"
+                Style="{StaticResource SectionTitleStyle}"
+                FontSize="17"
+                SemanticProperties.HeadingLevel="Level2" />
+
+            <Label
+                Text="Choose a password with at least 8 characters."
+                Margin="0,0,0,14"
+                Style="{StaticResource MutedTextStyle}" />
 
             <!-- Password -->
             <Label
                 Text="Password"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,0,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding Password}"
                     Placeholder="Minimum 8 characters"
                     IsPassword="True"
                     ReturnType="Next"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
-                    SemanticProperties.Description="Password" />
+                    SemanticProperties.Description="Password, minimum 8 characters" />
             </Border>
 
-            <!-- Password confirmation -->
+            <!-- Confirm password -->
             <Label
                 Text="Confirm password"
-                Margin="0,18,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,17,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding ConfirmPassword}"
                     Placeholder="Enter your password again"
                     IsPassword="True"
                     ReturnType="Done"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Confirm password" />
             </Border>
 
             <!-- Validation and API errors -->
             <Border
                 Margin="0,18,0,0"
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Registration error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Registration error message" />
+
+                </Grid>
             </Border>
 
             <!-- Successful registration feedback -->
             <Border
                 Margin="0,18,0,0"
-                Padding="12"
-                BackgroundColor="#E8F5E9"
-                Stroke="#C8E6C9"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource SuccessBannerStyle}"
                 IsVisible="{Binding HasSuccess}">
 
-                <Label
-                    Text="{Binding SuccessMessage}"
-                    FontSize="13"
-                    TextColor="#1B5E20"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Registration success message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Success}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding SuccessMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Success}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Registration success message" />
+
+                </Grid>
             </Border>
 
             <!-- Registration action -->
             <Button
                 Text="Create Account"
                 Margin="0,24,0,0"
+                Style="{StaticResource PrimaryButtonStyle}"
                 HeightRequest="52"
-                CornerRadius="10"
-                BackgroundColor="#1565C0"
-                TextColor="White"
                 FontSize="16"
-                FontAttributes="Bold"
                 Command="{Binding RegisterCommand}"
                 IsEnabled="{Binding IsNotBusy}"
-                SemanticProperties.Description="Create account" />
+                SemanticProperties.Description="Create SmartClinic account" />
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
-                Margin="0,16,0,0"
+                Margin="0,15,0,0"
                 Spacing="10"
                 HorizontalOptions="Center"
                 IsVisible="{Binding IsBusy}">
 
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
-                    Color="#1565C0"
                     WidthRequest="22"
                     HeightRequest="22" />
 
                 <Label
                     Text="Creating your account..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Creating your account" />
+
             </HorizontalStackLayout>
 
-            <!-- Login navigation will be connected next -->
+            <!-- Existing login navigation -->
             <HorizontalStackLayout
-                Margin="0,28,0,0"
+                Margin="0,27,0,0"
                 Spacing="4"
                 HorizontalOptions="Center">
 
                 <Label
                     Text="Already have an account?"
+                    Style="{StaticResource MutedTextStyle}"
                     FontSize="14"
-                    TextColor="#6B778C" />
+                    VerticalTextAlignment="Center" />
 
                 <Label
-                 Text="Sign in"
-                 FontSize="14"
-                 FontAttributes="Bold"
-                 TextColor="#1565C0"
-                 SemanticProperties.Description="Sign in">
+                    Text="Sign in"
+                    FontFamily="OpenSansSemibold"
+                    FontSize="14"
+                    TextColor="{StaticResource Primary}"
+                    Padding="4,8"
+                    SemanticProperties.Description="Return to sign in">
 
-                <Label.GestureRecognizers>
-                <TapGestureRecognizer
-                 Tapped="OnSignInTapped" />
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnSignInTapped" />
                     </Label.GestureRecognizers>
 
                 </Label>
             </HorizontalStackLayout>
+
+            <!-- Security reassurance -->
+            <Border
+                Margin="0,24,0,0"
+                Padding="12,10"
+                BackgroundColor="{StaticResource PrimaryLight}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10">
+
+                <Label
+                    Text="Your account provides secure access to your personal healthcare information."
+                    FontSize="11"
+                    TextColor="{StaticResource TextSecondary}"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
+            <BoxView
+                Margin="0,22,0,0"
+                WidthRequest="42"
+                HeightRequest="3"
+                CornerRadius="2"
+                BackgroundColor="{StaticResource Secondary}"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>
