@@ -6,11 +6,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
     Title="Consultation History"
-    BackgroundColor="#F5F8FA">
+    BackgroundColor="{StaticResource PageBackground}">
 
     <Grid
         Padding="24,24,24,30"
-        RowDefinitions="Auto,Auto,*">
+        RowDefinitions="Auto,Auto,*"
+        MaximumWidthRequest="620"
+        HorizontalOptions="Center">
 
         <!-- Page heading -->
         <VerticalStackLayout
@@ -19,14 +21,12 @@
 
             <Label
                 Text="Consultation History"
-                FontSize="26"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource PageTitleStyle}"
+                SemanticProperties.HeadingLevel="Level1" />
 
             <Label
                 Text="Review your previous consultations and medical information."
-                FontSize="14"
-                TextColor="#6B778C"
+                Style="{StaticResource PageSubtitleStyle}"
                 LineBreakMode="WordWrap" />
 
         </VerticalStackLayout>
@@ -44,31 +44,41 @@
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
                     WidthRequest="22"
-                    HeightRequest="22"
-                    Color="#1565C0" />
+                    HeightRequest="22" />
 
                 <Label
                     Text="Loading consultation history..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Loading consultation history" />
 
             </HorizontalStackLayout>
 
             <Border
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Consultation history error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Consultation history error message" />
+
+                </Grid>
 
             </Border>
 
@@ -81,34 +91,43 @@
 
             <!-- Empty state -->
             <Border
-                Padding="26"
+                Padding="28,30"
                 VerticalOptions="Start"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14"
+                Style="{StaticResource CardStyle}"
                 IsVisible="{Binding HasNoConsultations}">
 
                 <VerticalStackLayout
                     Spacing="10"
                     HorizontalOptions="Center">
 
-                    <Label
-                        Text="📋"
-                        FontSize="34"
-                        HorizontalTextAlignment="Center" />
+                    <Border
+                        WidthRequest="54"
+                        HeightRequest="54"
+                        BackgroundColor="{StaticResource PrimaryLight}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16">
+
+                        <Label
+                            Text="HX"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="14"
+                            TextColor="{StaticResource Primary}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center" />
+
+                    </Border>
 
                     <Label
                         Text="No consultation history"
+                        Margin="0,4,0,0"
+                        Style="{StaticResource CardTitleStyle}"
                         FontSize="17"
-                        FontAttributes="Bold"
-                        TextColor="#172B4D"
                         HorizontalTextAlignment="Center" />
 
                     <Label
                         Text="Completed consultations will appear here for you to review."
+                        Style="{StaticResource MutedTextStyle}"
                         FontSize="13"
-                        TextColor="#6B778C"
                         HorizontalTextAlignment="Center"
                         LineBreakMode="WordWrap" />
 
@@ -131,87 +150,105 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Consultation">
 
-                        <Border
-                            Padding="18"
-                            BackgroundColor="White"
-                            Stroke="#D9E2EC"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 14">
+                        <Border Style="{StaticResource CardStyle}">
 
-                            <VerticalStackLayout Spacing="13">
+                            <VerticalStackLayout Spacing="14">
 
-                                <!-- Doctor and date -->
+                                <!-- Doctor and consultation date -->
                                 <Grid
-                                    ColumnDefinitions="*,Auto"
+                                    ColumnDefinitions="Auto,*,Auto"
                                     ColumnSpacing="12">
 
-                                    <VerticalStackLayout
+                                    <Border
                                         Grid.Column="0"
-                                        Spacing="3">
+                                        WidthRequest="42"
+                                        HeightRequest="42"
+                                        VerticalOptions="Start"
+                                        BackgroundColor="{StaticResource PrimaryLight}"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 11">
+
+                                        <Label
+                                            Text="DR"
+                                            FontFamily="OpenSansSemibold"
+                                            FontSize="11"
+                                            TextColor="{StaticResource Primary}"
+                                            HorizontalTextAlignment="Center"
+                                            VerticalTextAlignment="Center" />
+
+                                    </Border>
+
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="3"
+                                        VerticalOptions="Center">
 
                                         <Label
                                             Text="{Binding DoctorName}"
-                                            FontSize="17"
-                                            FontAttributes="Bold"
-                                            TextColor="#172B4D" />
+                                            Style="{StaticResource CardTitleStyle}"
+                                            FontSize="16" />
 
                                         <Label
                                             Text="Consultation"
                                             FontSize="12"
-                                            TextColor="#1565C0" />
+                                            TextColor="{StaticResource Primary}" />
 
                                     </VerticalStackLayout>
 
                                     <Border
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         Padding="9,5"
                                         VerticalOptions="Start"
-                                        BackgroundColor="#E8F5E9"
+                                        BackgroundColor="{StaticResource SuccessLight}"
                                         StrokeThickness="0"
                                         StrokeShape="RoundRectangle 8">
 
                                         <Label
                                             Text="{Binding ConsultationDate, StringFormat='{0:dd MMM yyyy}'}"
-                                            FontSize="11"
-                                            FontAttributes="Bold"
-                                            TextColor="#2E7D32" />
+                                            FontFamily="OpenSansSemibold"
+                                            FontSize="10"
+                                            TextColor="{StaticResource Success}" />
 
                                     </Border>
 
                                 </Grid>
 
+                                <BoxView
+                                    HeightRequest="1"
+                                    BackgroundColor="{StaticResource Divider}" />
+
                                 <!-- Diagnosis preview -->
-                                <VerticalStackLayout Spacing="3">
+                                <VerticalStackLayout Spacing="4">
 
                                     <Label
-                                        Text="Diagnosis"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        TextColor="#6B778C" />
+                                        Text="DIAGNOSIS"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="10"
+                                        TextColor="{StaticResource TextSecondary}" />
 
                                     <Label
                                         Text="{Binding Diagnosis}"
+                                        FontFamily="OpenSansSemibold"
                                         FontSize="14"
-                                        FontAttributes="Bold"
-                                        TextColor="#172B4D"
+                                        TextColor="{StaticResource TextPrimary}"
                                         LineBreakMode="TailTruncation"
                                         MaxLines="2" />
 
                                 </VerticalStackLayout>
 
                                 <!-- Consultation summary preview -->
-                                <VerticalStackLayout Spacing="3">
+                                <VerticalStackLayout Spacing="4">
 
                                     <Label
-                                        Text="Summary"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        TextColor="#6B778C" />
+                                        Text="SUMMARY"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="10"
+                                        TextColor="{StaticResource TextSecondary}" />
 
                                     <Label
                                         Text="{Binding Summary}"
+                                        Style="{StaticResource BodyTextStyle}"
                                         FontSize="13"
-                                        TextColor="#44546A"
                                         LineBreakMode="TailTruncation"
                                         MaxLines="3" />
 
@@ -220,12 +257,7 @@
                                 <!-- Open the complete clinical record -->
                                 <Button
                                     Text="View Consultation Details"
-                                    HeightRequest="44"
-                                    CornerRadius="9"
-                                    BackgroundColor="#E3F2FD"
-                                    TextColor="#1565C0"
-                                    FontSize="13"
-                                    FontAttributes="Bold"
+                                    Style="{StaticResource SecondaryButtonStyle}"
                                     Clicked="OnViewConsultationClicked"
                                     SemanticProperties.Description="View consultation details" />
 
