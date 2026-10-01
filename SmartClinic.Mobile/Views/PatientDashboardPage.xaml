@@ -5,50 +5,67 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Home"
-    BackgroundColor="#F5F8FA"
-    Shell.NavBarIsVisible="False">
+    BackgroundColor="{StaticResource PageBackground}"
+    Shell.NavBarIsVisible="False"
+    NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="24,36,24,40"
-            Spacing="0">
+            Padding="24,26,24,40"
+            Spacing="0"
+            MaximumWidthRequest="620"
+            HorizontalOptions="Center">
 
-            <!-- Dashboard header -->
+            <!-- Compact authenticated header -->
             <Grid
                 ColumnDefinitions="*,Auto"
                 ColumnSpacing="16">
 
                 <VerticalStackLayout
                     Grid.Column="0"
-                    Spacing="4">
+                    Spacing="5"
+                    VerticalOptions="Center">
+
+                    <Image
+                        Source="smartclinic_logo.png"
+                        WidthRequest="128"
+                        HeightRequest="58"
+                        Aspect="AspectFit"
+                        HorizontalOptions="Start"
+                        SemanticProperties.Description="Doringkloof Medical Centre logo" />
 
                     <Label
                         Text="{Binding WelcomeMessage}"
-                        FontSize="27"
-                        FontAttributes="Bold"
-                        TextColor="#172B4D" />
+                        Margin="0,8,0,0"
+                        Style="{StaticResource PageTitleStyle}"
+                        FontSize="26"
+                        SemanticProperties.HeadingLevel="Level1" />
 
                     <Label
                         Text="Here's what's happening with your healthcare."
-                        FontSize="14"
-                        TextColor="#6B778C" />
+                        Style="{StaticResource PageSubtitleStyle}" />
 
                 </VerticalStackLayout>
 
+                <!-- Profile action -->
                 <Border
                     Grid.Column="1"
                     WidthRequest="48"
                     HeightRequest="48"
-                    BackgroundColor="#E3F2FD"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 14">
+                    VerticalOptions="Start"
+                    BackgroundColor="{StaticResource PrimaryLight}"
+                    Stroke="{StaticResource Primary}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    SemanticProperties.Description="Open patient profile">
 
                     <Label
-                        Text="👤"
-                        FontSize="23"
+                        Text="ME"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="13"
+                        TextColor="{StaticResource Primary}"
                         HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"
-                        SemanticProperties.Description="Patient profile" />
+                        VerticalTextAlignment="Center" />
 
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer
@@ -61,165 +78,174 @@
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
-                Margin="0,24,0,0"
+                Margin="0,22,0,0"
                 Spacing="10"
                 IsVisible="{Binding IsBusy}">
 
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
-                    Color="#1565C0"
                     WidthRequest="22"
                     HeightRequest="22" />
 
                 <Label
                     Text="Loading your information..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Loading dashboard information" />
 
             </HorizontalStackLayout>
 
             <!-- Error feedback -->
             <Border
-                Margin="0,20,0,0"
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Margin="0,18,0,0"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Dashboard error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
 
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Dashboard error message" />
+
+                </Grid>
             </Border>
 
             <!-- Upcoming appointment -->
             <Label
                 Text="Upcoming appointment"
-                Margin="0,32,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Margin="0,30,0,12"
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-            <!-- Displayed when the patient has an upcoming appointment -->
+            <!-- Patient has an upcoming appointment -->
             <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14"
+                Style="{StaticResource CardStyle}"
                 IsVisible="{Binding HasUpcomingAppointment}">
 
-                <VerticalStackLayout Spacing="10">
-
-                    <Label
-                        Text="{Binding UpcomingAppointment.DoctorName}"
-                        FontSize="17"
-                        FontAttributes="Bold"
-                        TextColor="#172B4D" />
-
-                    <Label
-                        Text="{Binding UpcomingAppointment.DoctorSpecialisation}"
-                        FontSize="13"
-                        TextColor="#1565C0" />
+                <VerticalStackLayout Spacing="12">
 
                     <Grid
-                        Margin="0,6,0,0"
-                        ColumnDefinitions="Auto,*"
-                        RowDefinitions="Auto,Auto"
-                        ColumnSpacing="10"
-                        RowSpacing="6">
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="12">
 
-                        <Label
-                            Grid.Row="0"
+                        <VerticalStackLayout
                             Grid.Column="0"
-                            Text="Date"
-                            FontSize="13"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            Spacing="3">
 
-                        <Label
-                            Grid.Row="0"
+                            <Label
+                                Text="{Binding UpcomingAppointment.DoctorName}"
+                                Style="{StaticResource CardTitleStyle}" />
+
+                            <Label
+                                Text="{Binding UpcomingAppointment.DoctorSpecialisation}"
+                                FontSize="13"
+                                TextColor="{StaticResource Primary}" />
+
+                        </VerticalStackLayout>
+
+                        <Border
                             Grid.Column="1"
-                            Text="{Binding UpcomingAppointment.AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
-                            FontSize="13"
-                            TextColor="#172B4D" />
+                            Padding="10,6"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            BackgroundColor="{StaticResource PrimaryLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 8">
 
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Text="Time"
-                            FontSize="13"
-                            FontAttributes="Bold"
-                            TextColor="#6B778C" />
+                            <Label
+                                Text="{Binding UpcomingAppointment.Status}"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="11"
+                                TextColor="{StaticResource Primary}" />
 
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Text="{Binding UpcomingAppointment.AppointmentDateTime, StringFormat='{0:HH:mm}'}"
-                            FontSize="13"
-                            TextColor="#172B4D" />
+                        </Border>
 
                     </Grid>
 
-                    <Border
-                        Margin="0,6,0,0"
-                        Padding="10,6"
-                        HorizontalOptions="Start"
-                        BackgroundColor="#E3F2FD"
-                        StrokeThickness="0"
-                        StrokeShape="RoundRectangle 8">
+                    <BoxView
+                        HeightRequest="1"
+                        BackgroundColor="{StaticResource Divider}" />
 
-                        <Label
-                            Text="{Binding UpcomingAppointment.Status}"
-                            FontSize="12"
-                            FontAttributes="Bold"
-                            TextColor="#1565C0" />
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="12">
 
-                    </Border>
+                        <VerticalStackLayout
+                            Grid.Column="0"
+                            Spacing="3">
+
+                            <Label
+                                Text="DATE"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="11"
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                Text="{Binding UpcomingAppointment.AppointmentDateTime, StringFormat='{0:dd MMM yyyy}'}"
+                                FontSize="14"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="3">
+
+                            <Label
+                                Text="TIME"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="11"
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                Text="{Binding UpcomingAppointment.AppointmentDateTime, StringFormat='{0:HH:mm}'}"
+                                FontSize="14"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
 
                 </VerticalStackLayout>
 
             </Border>
 
-            <!-- Displayed when no future appointment exists -->
+            <!-- No upcoming appointment -->
             <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14"
+                Style="{StaticResource CardStyle}"
                 IsVisible="{Binding HasNoUpcomingAppointment}">
 
-                <VerticalStackLayout Spacing="10">
+                <VerticalStackLayout Spacing="9">
 
                     <Label
                         Text="No upcoming appointment"
-                        FontSize="16"
-                        FontAttributes="Bold"
-                        TextColor="#172B4D" />
+                        Style="{StaticResource CardTitleStyle}" />
 
                     <Label
                         Text="Book an appointment with one of our available doctors."
-                        FontSize="13"
-                        TextColor="#6B778C"
+                        Style="{StaticResource MutedTextStyle}"
                         LineHeight="1.2" />
 
                     <Button
                         Text="Book Appointment"
                         Margin="0,8,0,0"
-                        HeightRequest="46"
-                        CornerRadius="9"
-                        BackgroundColor="#1565C0"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        SemanticProperties.Description="Book appointment"
-                        Clicked="OnBookAppointmentClicked" />
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Clicked="OnBookAppointmentClicked"
+                        SemanticProperties.Description="Book an appointment" />
 
                 </VerticalStackLayout>
 
@@ -229,9 +255,8 @@
             <Label
                 Text="Quick actions"
                 Margin="0,30,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
             <Grid
                 ColumnDefinitions="*,*"
@@ -243,30 +268,39 @@
                 <Border
                     Grid.Row="0"
                     Grid.Column="0"
-                    Padding="16"
-                    MinimumHeightRequest="125"
-                    BackgroundColor="White"
-                    Stroke="#D9E2EC"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14">
+                    Style="{StaticResource CardStyle}"
+                    MinimumHeightRequest="136"
+                    SemanticProperties.Description="View and manage appointments">
 
                     <VerticalStackLayout Spacing="8">
 
-                        <Label
-                            Text="📅"
-                            FontSize="25"
-                            SemanticProperties.Description="Appointments" />
+                        <Border
+                            WidthRequest="42"
+                            HeightRequest="42"
+                            HorizontalOptions="Start"
+                            BackgroundColor="{StaticResource PrimaryLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 11">
+
+                            <Label
+                                Text="APT"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="11"
+                                TextColor="{StaticResource Primary}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
 
                         <Label
                             Text="Appointments"
-                            FontSize="15"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="15" />
 
                         <Label
                             Text="View and manage"
-                            FontSize="12"
-                            TextColor="#6B778C" />
+                            Style="{StaticResource MutedTextStyle}"
+                            FontSize="12" />
 
                     </VerticalStackLayout>
 
@@ -281,32 +315,40 @@
                 <Border
                     Grid.Row="0"
                     Grid.Column="1"
-                    Padding="16"
-                    MinimumHeightRequest="125"
-                    BackgroundColor="White"
-                    Stroke="#D9E2EC"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14">
+                    Style="{StaticResource CardStyle}"
+                    MinimumHeightRequest="136"
+                    SemanticProperties.Description="Check in and join the clinic queue">
 
                     <VerticalStackLayout Spacing="8">
 
-                        <Label
-                            Text="✓"
-                            FontSize="27"
-                            FontAttributes="Bold"
-                            TextColor="#1565C0"
-                            SemanticProperties.Description="Check in" />
+                        <Border
+                            WidthRequest="42"
+                            HeightRequest="42"
+                            HorizontalOptions="Start"
+                            BackgroundColor="{StaticResource SuccessLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 11">
+
+                            <Label
+                                Text="IN"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="12"
+                                TextColor="{StaticResource Success}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
 
                         <Label
                             Text="Check In"
-                            FontSize="15"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="15" />
 
                         <Label
                             Text="Join the clinic queue"
+                            Style="{StaticResource MutedTextStyle}"
                             FontSize="12"
-                            TextColor="#6B778C" />
+                            LineBreakMode="WordWrap" />
 
                     </VerticalStackLayout>
 
@@ -321,32 +363,40 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="0"
-                    Padding="16"
-                    MinimumHeightRequest="125"
-                    BackgroundColor="White"
-                    Stroke="#D9E2EC"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14">
+                    Style="{StaticResource CardStyle}"
+                    MinimumHeightRequest="136"
+                    SemanticProperties.Description="View prescriptions">
 
                     <VerticalStackLayout Spacing="8">
 
-                        <Label
-                            Text="Rx"
-                            FontSize="22"
-                            FontAttributes="Bold"
-                            TextColor="#1565C0"
-                            SemanticProperties.Description="Prescriptions" />
+                        <Border
+                            WidthRequest="42"
+                            HeightRequest="42"
+                            HorizontalOptions="Start"
+                            BackgroundColor="{StaticResource PrimaryLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 11">
+
+                            <Label
+                                Text="Rx"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="15"
+                                TextColor="{StaticResource Primary}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
 
                         <Label
                             Text="Prescriptions"
-                            FontSize="15"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="15" />
 
                         <Label
                             Text="View your medication"
+                            Style="{StaticResource MutedTextStyle}"
                             FontSize="12"
-                            TextColor="#6B778C" />
+                            LineBreakMode="WordWrap" />
 
                     </VerticalStackLayout>
 
@@ -361,30 +411,40 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="1"
-                    Padding="16"
-                    MinimumHeightRequest="125"
-                    BackgroundColor="White"
-                    Stroke="#D9E2EC"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 14">
+                    Style="{StaticResource CardStyle}"
+                    MinimumHeightRequest="136"
+                    SemanticProperties.Description="View consultation history">
 
                     <VerticalStackLayout Spacing="8">
 
-                        <Label
-                            Text="📋"
-                            FontSize="24"
-                            SemanticProperties.Description="Consultation history" />
+                        <Border
+                            WidthRequest="42"
+                            HeightRequest="42"
+                            HorizontalOptions="Start"
+                            BackgroundColor="{StaticResource SecondaryLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 11">
+
+                            <Label
+                                Text="HX"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="12"
+                                TextColor="{StaticResource Secondary}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
 
                         <Label
                             Text="History"
-                            FontSize="15"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="15" />
 
                         <Label
                             Text="Past consultations"
+                            Style="{StaticResource MutedTextStyle}"
                             FontSize="12"
-                            TextColor="#6B778C" />
+                            LineBreakMode="WordWrap" />
 
                     </VerticalStackLayout>
 
@@ -400,12 +460,9 @@
             <!-- Notifications -->
             <Border
                 Margin="0,12,0,0"
-                Padding="16"
-                MinimumHeightRequest="88"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+                Style="{StaticResource CardStyle}"
+                MinimumHeightRequest="90"
+                SemanticProperties.Description="Open notifications">
 
                 <Grid
                     ColumnDefinitions="Auto,*,Auto"
@@ -416,16 +473,17 @@
                         WidthRequest="46"
                         HeightRequest="46"
                         VerticalOptions="Center"
-                        BackgroundColor="#E3F2FD"
+                        BackgroundColor="{StaticResource PrimaryLight}"
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 12">
 
                         <Label
-                            Text="🔔"
-                            FontSize="22"
+                            Text="N"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="15"
+                            TextColor="{StaticResource Primary}"
                             HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
-                            SemanticProperties.Description="Notifications" />
+                            VerticalTextAlignment="Center" />
 
                     </Border>
 
@@ -436,14 +494,13 @@
 
                         <Label
                             Text="Notifications"
-                            FontSize="15"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="15" />
 
                         <Label
                             Text="Reminders, confirmations and clinic updates"
+                            Style="{StaticResource MutedTextStyle}"
                             FontSize="12"
-                            TextColor="#6B778C"
                             LineBreakMode="WordWrap" />
 
                     </VerticalStackLayout>
@@ -452,8 +509,9 @@
                         Grid.Column="2"
                         Text="›"
                         FontSize="28"
-                        TextColor="#1565C0"
-                        VerticalTextAlignment="Center" />
+                        TextColor="{StaticResource Primary}"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Open notifications" />
 
                 </Grid>
 
@@ -464,37 +522,32 @@
 
             </Border>
 
-            <!-- Queue status -->
+            <!-- Clinic status -->
             <Label
                 Text="Clinic status"
                 Margin="0,30,0,12"
-                FontSize="18"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource SectionTitleStyle}"
+                SemanticProperties.HeadingLevel="Level2" />
 
-            <Border
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 14">
+            <Border Style="{StaticResource CardStyle}">
 
                 <Grid
                     ColumnDefinitions="Auto,*"
                     ColumnSpacing="14">
 
                     <Border
-                        WidthRequest="42"
-                        HeightRequest="42"
-                        BackgroundColor="#E8F5E9"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        VerticalOptions="Center"
+                        BackgroundColor="{StaticResource SuccessLight}"
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 12">
 
                         <Label
-                            Text="✓"
-                            FontSize="20"
-                            FontAttributes="Bold"
-                            TextColor="#2E7D32"
+                            Text="OK"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="11"
+                            TextColor="{StaticResource Success}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center" />
 
@@ -507,14 +560,13 @@
 
                         <Label
                             Text="Not checked in"
-                            FontSize="14"
-                            FontAttributes="Bold"
-                            TextColor="#172B4D" />
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="14" />
 
                         <Label
                             Text="Your queue information will appear here after check-in."
+                            Style="{StaticResource MutedTextStyle}"
                             FontSize="12"
-                            TextColor="#6B778C"
                             LineBreakMode="WordWrap" />
 
                     </VerticalStackLayout>
@@ -522,6 +574,15 @@
                 </Grid>
 
             </Border>
+
+            <!-- Subtle clinic brand accent -->
+            <BoxView
+                Margin="0,28,0,0"
+                WidthRequest="42"
+                HeightRequest="3"
+                CornerRadius="2"
+                BackgroundColor="{StaticResource Secondary}"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>
