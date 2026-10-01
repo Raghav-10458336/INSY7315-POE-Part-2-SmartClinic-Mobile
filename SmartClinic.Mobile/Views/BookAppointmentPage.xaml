@@ -6,25 +6,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:SmartClinic.Mobile.Models"
     Title="Book Appointment"
-    BackgroundColor="#F5F8FA">
+    BackgroundColor="{StaticResource PageBackground}">
 
     <ScrollView>
         <VerticalStackLayout
             Padding="24,24,24,40"
-            Spacing="0">
+            Spacing="0"
+            MaximumWidthRequest="620"
+            HorizontalOptions="Center">
 
             <!-- Page heading -->
             <Label
                 Text="Book an Appointment"
-                FontSize="26"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+                Style="{StaticResource PageTitleStyle}"
+                SemanticProperties.HeadingLevel="Level1" />
 
             <Label
                 Text="Choose a doctor and an available appointment time."
                 Margin="0,5,0,0"
-                FontSize="14"
-                TextColor="#6B778C" />
+                Style="{StaticResource PageSubtitleStyle}" />
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
@@ -34,34 +34,44 @@
 
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
-                    Color="#1565C0"
                     WidthRequest="22"
                     HeightRequest="22" />
 
                 <Label
                     Text="Loading appointment information..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Loading appointment information" />
 
             </HorizontalStackLayout>
 
             <!-- Error feedback -->
             <Border
                 Margin="0,18,0,0"
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Booking error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Booking error message" />
+
+                </Grid>
 
             </Border>
 
@@ -69,82 +79,97 @@
             <Label
                 Text="Choose a doctor"
                 Margin="0,28,0,8"
-                FontSize="15"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="12,3"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
+            <Border Style="{StaticResource InputBorderStyle}">
 
                 <Picker
                     Title="Select a doctor"
                     ItemsSource="{Binding Doctors}"
                     SelectedItem="{Binding SelectedDoctor}"
                     ItemDisplayBinding="{Binding FullName}"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    MinimumHeightRequest="50"
                     SemanticProperties.Description="Select doctor" />
 
             </Border>
 
-            <!-- Doctor details -->
+            <!-- Selected doctor details -->
             <Border
                 Margin="0,14,0,0"
                 Padding="16"
-                BackgroundColor="#E3F2FD"
-                StrokeThickness="0"
+                BackgroundColor="{StaticResource PrimaryLight}"
+                Stroke="{StaticResource Primary}"
+                StrokeThickness="1"
                 StrokeShape="RoundRectangle 12"
                 IsVisible="{Binding HasSelectedDoctor}">
 
-                <VerticalStackLayout Spacing="4">
+                <Grid
+                    ColumnDefinitions="Auto,*"
+                    ColumnSpacing="13">
 
-                    <Label
-                        Text="{Binding SelectedDoctor.FullName}"
-                        FontSize="16"
-                        FontAttributes="Bold"
-                        TextColor="#172B4D" />
+                    <Border
+                        Grid.Column="0"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        VerticalOptions="Start"
+                        BackgroundColor="{StaticResource Surface}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12">
 
-                    <Label
-                        Text="{Binding SelectedDoctor.Specialisation}"
-                        FontSize="13"
-                        TextColor="#1565C0" />
+                        <Label
+                            Text="DR"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="12"
+                            TextColor="{StaticResource Primary}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center" />
 
-                    <Label
-                        Text="{Binding SelectedDoctor.Qualification}"
-                        FontSize="12"
-                        TextColor="#6B778C" />
+                    </Border>
 
-                </VerticalStackLayout>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="3"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Text="{Binding SelectedDoctor.FullName}"
+                            Style="{StaticResource CardTitleStyle}"
+                            FontSize="16" />
+
+                        <Label
+                            Text="{Binding SelectedDoctor.Specialisation}"
+                            FontSize="13"
+                            TextColor="{StaticResource Primary}" />
+
+                        <Label
+                            Text="{Binding SelectedDoctor.Qualification}"
+                            Style="{StaticResource MutedTextStyle}"
+                            FontSize="12" />
+
+                    </VerticalStackLayout>
+
+                </Grid>
 
             </Border>
 
-            <!-- Availability -->
+            <!-- Availability heading and action -->
             <Grid
-                Margin="0,28,0,8"
-                ColumnDefinitions="*,Auto">
+                Margin="0,28,0,10"
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="12">
 
                 <Label
                     Grid.Column="0"
                     Text="Available times"
-                    FontSize="15"
-                    FontAttributes="Bold"
-                    TextColor="#344563"
+                    Style="{StaticResource FieldLabelStyle}"
                     VerticalTextAlignment="Center" />
 
                 <Button
                     Grid.Column="1"
                     Text="View Times"
+                    Style="{StaticResource SecondaryButtonStyle}"
                     Padding="14,7"
-                    CornerRadius="8"
-                    BackgroundColor="#E3F2FD"
-                    TextColor="#1565C0"
+                    MinimumHeightRequest="40"
                     FontSize="12"
-                    FontAttributes="Bold"
                     SemanticProperties.Description="View available appointment times"
                     Clicked="OnViewTimesClicked" />
 
@@ -169,8 +194,8 @@
 
                         <Border
                             Padding="14"
-                            BackgroundColor="White"
-                            Stroke="#D9E2EC"
+                            BackgroundColor="{StaticResource Surface}"
+                            Stroke="{StaticResource Border}"
                             StrokeThickness="1"
                             StrokeShape="RoundRectangle 10">
 
@@ -184,24 +209,33 @@
 
                                     <Label
                                         Text="{Binding StartDateTime, StringFormat='{0:dddd, dd MMM yyyy}'}"
+                                        FontFamily="OpenSansSemibold"
                                         FontSize="13"
-                                        FontAttributes="Bold"
-                                        TextColor="#172B4D" />
+                                        TextColor="{StaticResource TextPrimary}" />
 
                                     <Label
                                         Text="{Binding StartDateTime, StringFormat='{0:HH:mm}'}"
+                                        FontFamily="OpenSansSemibold"
                                         FontSize="13"
-                                        TextColor="#1565C0" />
+                                        TextColor="{StaticResource Primary}" />
 
                                 </VerticalStackLayout>
 
-                                <Label
+                                <Border
                                     Grid.Column="1"
-                                    Text="Available"
-                                    FontSize="11"
-                                    FontAttributes="Bold"
-                                    TextColor="#2E7D32"
-                                    VerticalTextAlignment="Center" />
+                                    Padding="9,5"
+                                    VerticalOptions="Center"
+                                    BackgroundColor="{StaticResource SuccessLight}"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8">
+
+                                    <Label
+                                        Text="Available"
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="10"
+                                        TextColor="{StaticResource Success}" />
+
+                                </Border>
 
                             </Grid>
 
@@ -212,48 +246,73 @@
 
             </CollectionView>
 
+            <!-- Booking guidance -->
+            <Border
+                Margin="0,12,0,0"
+                Padding="12"
+                BackgroundColor="{StaticResource InfoLight}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10"
+                IsVisible="{Binding HasSelectedDoctor}">
+
+                <Label
+                    Text="Select one of the available times above to continue with your booking."
+                    FontSize="12"
+                    TextColor="{StaticResource Info}"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
             <!-- Reason for visit -->
             <Label
                 Text="Reason for visit"
                 Margin="0,28,0,8"
-                FontSize="15"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="12"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
+            <Border Style="{StaticResource InputBorderStyle}">
 
                 <Editor
                     Text="{Binding ReasonForVisit}"
                     Placeholder="Briefly describe the reason for your appointment"
                     AutoSize="TextChanges"
                     MinimumHeightRequest="100"
-                    FontSize="14"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
                     SemanticProperties.Description="Reason for visit" />
 
             </Border>
 
+            <Label
+                Text="This helps the clinic prepare for your consultation."
+                Margin="2,7,0,0"
+                Style="{StaticResource MutedTextStyle}"
+                FontSize="11" />
+
             <!-- Successful booking feedback -->
             <Border
                 Margin="0,20,0,0"
-                Padding="12"
-                BackgroundColor="#E8F5E9"
-                Stroke="#C8E6C9"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource SuccessBannerStyle}"
                 IsVisible="{Binding HasSuccess}">
 
-                <Label
-                    Text="{Binding SuccessMessage}"
-                    FontSize="13"
-                    TextColor="#2E7D32"
-                    LineBreakMode="WordWrap" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Success}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding SuccessMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Success}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Appointment booking successful" />
+
+                </Grid>
 
             </Border>
 
@@ -261,22 +320,36 @@
             <Button
                 Text="Confirm Appointment"
                 Margin="0,26,0,0"
-                HeightRequest="52"
-                CornerRadius="10"
-                BackgroundColor="#1565C0"
-                TextColor="White"
-                FontSize="15"
-                FontAttributes="Bold"
+                Style="{StaticResource PrimaryButtonStyle}"
                 IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding CreateAppointmentCommand}"
                 SemanticProperties.Description="Confirm appointment" />
 
-            <Label
-                Text="You will be able to review the appointment before it is submitted."
-                Margin="0,12,0,0"
-                FontSize="12"
-                TextColor="#8993A4"
-                HorizontalTextAlignment="Center" />
+            <!-- Security and confirmation reassurance -->
+            <Border
+                Margin="0,14,0,0"
+                Padding="12"
+                BackgroundColor="{StaticResource SurfaceMuted}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10">
+
+                <Label
+                    Text="Your appointment details are submitted securely to Doringkloof Medical Centre."
+                    Style="{StaticResource MutedTextStyle}"
+                    FontSize="11"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap" />
+
+            </Border>
+
+            <!-- Clinic brand accent -->
+            <BoxView
+                Margin="0,26,0,0"
+                WidthRequest="42"
+                HeightRequest="3"
+                CornerRadius="2"
+                BackgroundColor="{StaticResource Secondary}"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>
