@@ -5,185 +5,169 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Sign In"
-    BackgroundColor="#F5F8FA"
-    Shell.NavBarIsVisible="False">
+    BackgroundColor="{StaticResource PageBackground}"
+    Shell.NavBarIsVisible="False"
+    NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="28,60,28,32"
-            Spacing="0">
+            Padding="28,42,28,30"
+            Spacing="0"
+            MaximumWidthRequest="520"
+            HorizontalOptions="Center">
 
-            <!-- Smart Clinic branding -->
-            <Border
-                WidthRequest="64"
-                HeightRequest="64"
+            <!-- Official Doringkloof Medical Centre branding -->
+            <Image
+                Source="smartclinic_logo.png"
+                WidthRequest="190"
+                HeightRequest="108"
+                Aspect="AspectFit"
                 HorizontalOptions="Center"
-                BackgroundColor="#E3F2FD"
-                StrokeThickness="0"
-                StrokeShape="RoundRectangle 18">
-
-                <Label
-                    Text="✚"
-                    FontSize="32"
-                    TextColor="#1565C0"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center" />
-            </Border>
+                SemanticProperties.Description="Doringkloof Medical Centre logo" />
 
             <Label
-                Text="Smart Clinic"
-                Margin="0,18,0,0"
-                FontSize="30"
-                FontAttributes="Bold"
-                TextColor="#172B4D"
+                Text="SmartClinic"
+                Margin="0,10,0,0"
+                FontFamily="OpenSansSemibold"
+                FontSize="28"
+                TextColor="{StaticResource PrimaryDark}"
                 HorizontalTextAlignment="Center" />
 
             <Label
                 Text="Doringkloof Medical Centre"
-                Margin="0,5,0,0"
-                FontSize="14"
-                TextColor="#6B778C"
+                Margin="0,4,0,0"
+                Style="{StaticResource MutedTextStyle}"
                 HorizontalTextAlignment="Center" />
 
             <!-- Welcome section -->
-            <Label
-                Text="Welcome back"
-                Margin="0,48,0,0"
-                FontSize="24"
-                FontAttributes="Bold"
-                TextColor="#172B4D" />
+            <VerticalStackLayout
+                Margin="0,38,0,0"
+                Spacing="7">
 
-            <Label
-                Text="Sign in to manage your appointments and healthcare information."
-                Margin="0,8,0,28"
-                FontSize="14"
-                TextColor="#6B778C"
-                LineHeight="1.25" />
+                <Label
+                    Text="Welcome back"
+                    Style="{StaticResource PageTitleStyle}"
+                    FontSize="24"
+                    SemanticProperties.HeadingLevel="Level1" />
+
+                <Label
+                    Text="Sign in to manage your appointments and healthcare information."
+                    Style="{StaticResource PageSubtitleStyle}"
+                    LineHeight="1.25" />
+
+            </VerticalStackLayout>
 
             <!-- Email -->
             <Label
                 Text="Email address"
-                Margin="0,0,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,26,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding Email}"
                     Placeholder="Enter your email address"
                     Keyboard="Email"
                     ClearButtonVisibility="WhileEditing"
                     ReturnType="Next"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Email address" />
             </Border>
 
             <!-- Password -->
             <Label
                 Text="Password"
-                Margin="0,20,0,7"
-                FontSize="14"
-                FontAttributes="Bold"
-                TextColor="#344563" />
+                Margin="0,18,0,7"
+                Style="{StaticResource FieldLabelStyle}" />
 
-            <Border
-                Padding="14,4"
-                BackgroundColor="White"
-                Stroke="#D9E2EC"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10">
-
+            <Border Style="{StaticResource InputBorderStyle}">
                 <Entry
                     Text="{Binding Password}"
                     Placeholder="Enter your password"
                     IsPassword="True"
                     ReturnType="Done"
-                    FontSize="15"
-                    TextColor="#172B4D"
-                    PlaceholderColor="#8993A4"
-                    MinimumHeightRequest="48"
                     SemanticProperties.Description="Password" />
             </Border>
 
-            <!-- Validation and API errors -->
+            <!-- Validation and API feedback -->
             <Border
                 Margin="0,16,0,0"
-                Padding="12"
-                BackgroundColor="#FFEBEE"
-                Stroke="#FFCDD2"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 8"
+                Style="{StaticResource ErrorBannerStyle}"
                 IsVisible="{Binding HasError}">
 
-                <Label
-                    Text="{Binding ErrorMessage}"
-                    FontSize="13"
-                    TextColor="#B71C1C"
-                    LineBreakMode="WordWrap"
-                    SemanticProperties.Description="Sign in error message" />
+                <Grid
+                    ColumnDefinitions="4,*"
+                    ColumnSpacing="10">
+
+                    <!-- Branded error accent -->
+                    <BoxView
+                        Grid.Column="0"
+                        WidthRequest="4"
+                        CornerRadius="2"
+                        BackgroundColor="{StaticResource Secondary}"
+                        VerticalOptions="Fill" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding ErrorMessage}"
+                        FontSize="13"
+                        TextColor="{StaticResource Error}"
+                        LineBreakMode="WordWrap"
+                        VerticalTextAlignment="Center"
+                        SemanticProperties.Description="Sign in error message" />
+
+                </Grid>
             </Border>
 
-            <!-- Sign in -->
+            <!-- Primary sign-in action -->
             <Button
                 Text="Sign In"
                 Margin="0,24,0,0"
+                Style="{StaticResource PrimaryButtonStyle}"
                 HeightRequest="52"
-                CornerRadius="10"
-                BackgroundColor="#1565C0"
-                TextColor="White"
                 FontSize="16"
-                FontAttributes="Bold"
                 Command="{Binding LoginCommand}"
                 IsEnabled="{Binding IsNotBusy}"
-                SemanticProperties.Description="Sign in" />
+                SemanticProperties.Description="Sign in to SmartClinic" />
 
             <!-- Loading feedback -->
             <HorizontalStackLayout
-                Margin="0,16,0,0"
+                Margin="0,15,0,0"
                 Spacing="10"
                 HorizontalOptions="Center"
                 IsVisible="{Binding IsBusy}">
 
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
-                    Color="#1565C0"
                     WidthRequest="22"
                     HeightRequest="22" />
 
                 <Label
                     Text="Signing you in..."
-                    FontSize="13"
-                    TextColor="#6B778C"
-                    VerticalTextAlignment="Center" />
+                    Style="{StaticResource MutedTextStyle}"
+                    VerticalTextAlignment="Center"
+                    SemanticProperties.Description="Signing in" />
+
             </HorizontalStackLayout>
 
             <!-- Registration navigation -->
             <HorizontalStackLayout
-                Margin="0,30,0,0"
+                Margin="0,28,0,0"
                 Spacing="4"
                 HorizontalOptions="Center">
 
                 <Label
-                    Text="New to Smart Clinic?"
+                    Text="New to SmartClinic?"
+                    Style="{StaticResource MutedTextStyle}"
                     FontSize="14"
-                    TextColor="#6B778C" />
+                    VerticalTextAlignment="Center" />
 
                 <Label
                     Text="Create account"
+                    FontFamily="OpenSansSemibold"
                     FontSize="14"
-                    FontAttributes="Bold"
-                    TextColor="#1565C0"
-                    SemanticProperties.Description="Create account">
+                    TextColor="{StaticResource Primary}"
+                    Padding="4,8"
+                    SemanticProperties.Description="Create a SmartClinic account">
 
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer
@@ -191,15 +175,44 @@
                     </Label.GestureRecognizers>
 
                 </Label>
-
             </HorizontalStackLayout>
 
-            <Label
-                Text="Secure patient access"
-                Margin="0,40,0,0"
-                FontSize="12"
-                TextColor="#8993A4"
-                HorizontalTextAlignment="Center" />
+            <!-- Security reassurance -->
+            <Border
+                Margin="0,30,0,0"
+                Padding="12,10"
+                BackgroundColor="{StaticResource PrimaryLight}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 10">
+
+                <VerticalStackLayout
+                    Spacing="2">
+
+                    <Label
+                        Text="Secure patient access"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="12"
+                        TextColor="{StaticResource Primary}"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Your account protects access to your personal healthcare information."
+                        FontSize="11"
+                        TextColor="{StaticResource TextSecondary}"
+                        HorizontalTextAlignment="Center"
+                        LineBreakMode="WordWrap" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Small red accent ties the screen to the clinic's secondary brand colour -->
+            <BoxView
+                Margin="0,24,0,0"
+                WidthRequest="42"
+                HeightRequest="3"
+                CornerRadius="2"
+                BackgroundColor="{StaticResource Secondary}"
+                HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -1,17 +1,28 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SmartClinic.Mobile"
-             xmlns:converters="clr-namespace:SmartClinic.Mobile.Converters"
-             x:Class="SmartClinic.Mobile.App">
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<Application
+    x:Class="SmartClinic.Mobile.App"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SmartClinic.Mobile"
+    xmlns:converters="clr-namespace:SmartClinic.Mobile.Converters">
+
     <Application.Resources>
-        <converters:InvertedBoolConverter
-    x:Key="InvertedBoolConverter" />
+
         <ResourceDictionary>
+
+            <!-- Shared SmartClinic colours and reusable control styles -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Shared value converters -->
+            <converters:InvertedBoolConverter
+                x:Key="InvertedBoolConverter" />
+
         </ResourceDictionary>
+
     </Application.Resources>
+
 </Application>
