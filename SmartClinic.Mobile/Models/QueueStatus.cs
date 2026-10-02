@@ -1,25 +1,37 @@
-﻿namespace SmartClinic.Mobile.Models;
+﻿using SQLite;
+
+namespace SmartClinic.Mobile.Models;
 
 public class QueueStatus
 {
+    [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
+    // Links the queue record to the related appointment.
+    [Indexed(Unique = true)]
     public int AppointmentId { get; set; }
 
+    // Links the queue record to the patient who checked in.
+    [Indexed]
     public int PatientId { get; set; }
 
+    // Links the queue record to the doctor handling the appointment.
+    [Indexed]
     public int DoctorId { get; set; }
 
-    // Position currently assigned to the patient in the clinic queue.
+    // Represents the patient's current position in the clinic queue.
     public int QueuePosition { get; set; }
 
     public DateTime? CheckedInAt { get; set; }
 
     public DateTime? CalledAt { get; set; }
 
+    // Indicates whether the patient has completed check-in.
+    [Indexed]
     public bool IsCheckedIn { get; set; }
 
-    // Provides a simple status for displaying queue progress to the patient.
+    // Stores the current queue state shown to the patient.
+    [Indexed]
     public string Status { get; set; } = string.Empty;
 
     public string DoctorName { get; set; } = string.Empty;

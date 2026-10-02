@@ -1,16 +1,22 @@
-﻿namespace SmartClinic.Mobile.Models;
+﻿using SQLite;
+
+namespace SmartClinic.Mobile.Models;
 
 public class Patient
 {
+    [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    // Links the patient profile to the authenticated user account.
+    // Links the patient profile to its local user account.
+    [Indexed(Unique = true)]
     public int UserId { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
 
     public string LastName { get; set; } = string.Empty;
 
+    // Indexed to support quick profile lookups by email.
+    [Indexed(Unique = true)]
     public string Email { get; set; } = string.Empty;
 
     public string PhoneNumber { get; set; } = string.Empty;
@@ -21,8 +27,7 @@ public class Patient
 
     public string Address { get; set; } = string.Empty;
 
-    // Emergency contact information is kept with the patient profile
-    // so it can be displayed quickly when required.
+    // Emergency contact details are stored with the patient profile.
     public string EmergencyContactName { get; set; } = string.Empty;
 
     public string EmergencyContactNumber { get; set; } = string.Empty;
@@ -31,6 +36,7 @@ public class Patient
 
     public string MedicalAidNumber { get; set; } = string.Empty;
 
-    // Useful for displaying the patient's name consistently across screens.
+    // Calculated for display and does not require its own database column.
+    [Ignore]
     public string FullName => $"{FirstName} {LastName}".Trim();
 }

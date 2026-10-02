@@ -1,33 +1,39 @@
-﻿namespace SmartClinic.Mobile.Models;
+﻿using SQLite;
+
+namespace SmartClinic.Mobile.Models;
 
 public class Appointment
 {
+    [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    // Foreign identifiers allow the API to associate the appointment
-    // with the correct patient and doctor records.
+    // Links the appointment to the patient who made the booking.
+    [Indexed]
     public int PatientId { get; set; }
 
+    // Links the appointment to the selected doctor.
+    [Indexed]
     public int DoctorId { get; set; }
 
+    // Indexed because appointments are frequently filtered and ordered by date.
+    [Indexed]
     public DateTime AppointmentDateTime { get; set; }
 
-    // Duration is supplied by the scheduling system and can vary if required.
     public int DurationMinutes { get; set; } = 30;
 
+    // Tracks the appointment throughout its lifecycle.
+    [Indexed]
     public AppointmentStatus Status { get; set; } = AppointmentStatus.Scheduled;
 
     public string ReasonForVisit { get; set; } = string.Empty;
 
-    // Optional patient notes supplied during the booking process.
     public string Notes { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
-    // These display values allow appointment cards to show useful information
-    // without requiring additional lookups in the UI layer.
+    // Display values keep appointment cards simple while retaining ID relationships.
     public string DoctorName { get; set; } = string.Empty;
 
     public string DoctorSpecialisation { get; set; } = string.Empty;
