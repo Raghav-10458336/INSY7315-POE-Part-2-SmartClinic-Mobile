@@ -1,0 +1,41 @@
+name: SmartClinic Mobile CI
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - "feature/**"
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install .NET MAUI workload
+        run: dotnet workload install maui-android
+
+      - name: Restore mobile project
+        run: dotnet restore SmartClinic.Mobile/SmartClinic.Mobile.csproj
+
+      - name: Restore test project
+        run: dotnet restore SmartClinic.Mobile.Tests/SmartClinic.Mobile.Tests.csproj
+
+      - name: Build mobile project
+        run: dotnet build SmartClinic.Mobile/SmartClinic.Mobile.csproj --configuration Release --no-restore
+
+      - name: Run automated tests
+        run: dotnet test SmartClinic.Mobile.Tests/SmartClinic.Mobile.Tests.csproj --configuration Release --no-restore --verbosity normal
