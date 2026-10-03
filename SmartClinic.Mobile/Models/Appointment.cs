@@ -39,4 +39,27 @@ public class Appointment
     public string DoctorSpecialisation { get; set; } = string.Empty;
 
     public string PatientName { get; set; } = string.Empty;
+
+    // UI helpers are calculated from the appointment lifecycle and are not stored.
+    [Ignore]
+    public bool CanManage =>
+        Status == AppointmentStatus.Scheduled ||
+        Status == AppointmentStatus.Confirmed;
+
+    [Ignore]
+    public bool CanAccessCheckIn =>
+        Status == AppointmentStatus.Scheduled ||
+        Status == AppointmentStatus.CheckedIn ||
+        Status == AppointmentStatus.InQueue;
+
+    [Ignore]
+    public bool IsQueueActive =>
+        Status == AppointmentStatus.CheckedIn ||
+        Status == AppointmentStatus.InQueue;
+
+    [Ignore]
+    public string QueueActionText =>
+        IsQueueActive
+            ? "View Queue Status"
+            : "Check In & View Queue";
 }

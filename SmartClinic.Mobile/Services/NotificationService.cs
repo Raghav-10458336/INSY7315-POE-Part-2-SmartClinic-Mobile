@@ -1,41 +1,39 @@
-﻿using SmartClinic.Mobile.Constants;
+﻿using SmartClinic.Mobile.Data;
 using SmartClinic.Mobile.Models;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace SmartClinic.Mobile.Services;
 
 public class NotificationService : INotificationService
 {
-    private readonly HttpClient _httpClient;
-    private const string TokenKey = "auth_token";
+    private readonly SmartClinicDatabase _smartClinicDatabase;
+    private readonly IAuthenticationService _authenticationService;
 
-    public NotificationService(HttpClient httpClient)
+    public NotificationService(
+        SmartClinicDatabase smartClinicDatabase,
+        IAuthenticationService authenticationService)
     {
-        _httpClient = httpClient;
+        _smartClinicDatabase = smartClinicDatabase;
+        _authenticationService = authenticationService;
     }
 
     public async Task<List<Notification>> GetNotificationsAsync()
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
+            var userId = await GetCurrentUserIdAsync();
 
-            // Retrieve all notifications for the authenticated patient.
-            var response = await _httpClient.GetAsync(
-                ApiConstants.NotificationsEndpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (userId is null)
             {
                 return [];
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<List<Notification>>() ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Return the signed-in user's notifications newest first.
+            return await database.Table<Notification>()
+                .Where(notification => notification.UserId == userId.Value)
+                .OrderByDescending(notification => notification.CreatedAt)
+                .ToListAsync();
         }
         catch (Exception)
         {
@@ -47,23 +45,22 @@ public class NotificationService : INotificationService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
+            var userId = await GetCurrentUserIdAsync();
 
-            // Retrieve notifications that have not yet been read.
-            var response = await _httpClient.GetAsync(
-                ApiConstants.UnreadNotificationsEndpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (userId is null)
             {
                 return [];
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<List<Notification>>() ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Only unread notifications belonging to the signed-in user are returned.
+            return await database.Table<Notification>()
+                .Where(notification =>
+                    notification.UserId == userId.Value &&
+                    !notification.IsRead)
+                .OrderByDescending(notification => notification.CreatedAt)
+                .ToListAsync();
         }
         catch (Exception)
         {
@@ -75,22 +72,40 @@ public class NotificationService : INotificationService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
+            if (notificationId <= 0)
+            {
+                return false;
+            }
 
-            var endpoint = string.Format(
-                ApiConstants.MarkNotificationReadEndpoint,
-                notificationId);
+            var userId = await GetCurrentUserIdAsync();
 
-            // Update the selected notification's read status.
-            var response = await _httpClient.PutAsync(
-                endpoint,
-                null);
+            if (userId is null)
+            {
+                return false;
+            }
 
-            return response.IsSuccessStatusCode;
-        }
-        catch (HttpRequestException)
-        {
-            return false;
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Ownership is verified before the notification can be changed.
+            var notification = await database.Table<Notification>()
+                .Where(existing =>
+                    existing.Id == notificationId &&
+                    existing.UserId == userId.Value)
+                .FirstOrDefaultAsync();
+
+            if (notification is null)
+            {
+                return false;
+            }
+
+            if (notification.IsRead)
+            {
+                return true;
+            }
+
+            notification.IsRead = true;
+
+            return await database.UpdateAsync(notification) > 0;
         }
         catch (Exception)
         {
@@ -102,18 +117,36 @@ public class NotificationService : INotificationService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
+            var userId = await GetCurrentUserIdAsync();
 
-            // Mark every notification belonging to the patient as read.
-            var response = await _httpClient.PutAsync(
-                ApiConstants.MarkAllNotificationsReadEndpoint,
-                null);
+            if (userId is null)
+            {
+                return false;
+            }
 
-            return response.IsSuccessStatusCode;
-        }
-        catch (HttpRequestException)
-        {
-            return false;
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            var unreadNotifications = await database.Table<Notification>()
+                .Where(notification =>
+                    notification.UserId == userId.Value &&
+                    !notification.IsRead)
+                .ToListAsync();
+
+            // Nothing to update is still a successful operation.
+            if (unreadNotifications.Count == 0)
+            {
+                return true;
+            }
+
+            foreach (var notification in unreadNotifications)
+            {
+                notification.IsRead = true;
+            }
+
+            var updatedRows =
+                await database.UpdateAllAsync(unreadNotifications);
+
+            return updatedRows == unreadNotifications.Count;
         }
         catch (Exception)
         {
@@ -121,19 +154,17 @@ public class NotificationService : INotificationService
         }
     }
 
-    private async Task AddAuthenticationHeaderAsync()
+    private async Task<int?> GetCurrentUserIdAsync()
     {
-        var token = await SecureStorage.Default.GetAsync(TokenKey);
+        var authenticationState =
+            await _authenticationService.GetAuthenticationStateAsync();
 
-        // Attach the patient's JWT to protected notification requests.
-        if (!string.IsNullOrWhiteSpace(token))
+        if (!authenticationState.IsAuthenticated ||
+            authenticationState.UserId is null)
         {
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            return null;
         }
-        else
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-        }
+
+        return authenticationState.UserId.Value;
     }
 }

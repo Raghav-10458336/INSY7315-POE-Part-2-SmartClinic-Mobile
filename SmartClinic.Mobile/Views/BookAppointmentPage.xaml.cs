@@ -13,6 +13,9 @@ public partial class BookAppointmentPage : ContentPage
         // Connect the booking page to its ViewModel.
         _viewModel = viewModel;
         BindingContext = _viewModel;
+
+        // Return to the appointments list after a successful booking.
+        _viewModel.AppointmentBooked += OnAppointmentBooked;
     }
 
     protected override async void OnAppearing()
@@ -27,5 +30,14 @@ public partial class BookAppointmentPage : ContentPage
     {
         // Load appointment slots for the doctor selected by the patient.
         await _viewModel.LoadAvailabilityAsync();
+    }
+
+    private async void OnAppointmentBooked(object? sender, EventArgs e)
+    {
+        // Return to the appointments list after the booking is saved.
+        if (Navigation.NavigationStack.Count > 1)
+        {
+            await Navigation.PopAsync();
+        }
     }
 }

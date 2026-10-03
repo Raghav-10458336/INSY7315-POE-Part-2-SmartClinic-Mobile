@@ -21,6 +21,9 @@ public partial class LoginViewModel : BaseViewModel
     [ObservableProperty]
     private bool hasError;
 
+    // Allows the page to respond when authentication succeeds.
+    public event EventHandler? LoginSucceeded;
+
     public LoginViewModel(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
@@ -61,7 +64,13 @@ public partial class LoginViewModel : BaseViewModel
                 return;
             }
 
-            // Navigation will be connected once the authenticated app shell is created.
+            // Notify the page that authenticated navigation can begin.
+            LoginSucceeded?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception)
+        {
+            ShowError(
+                "An unexpected error occurred while signing in. Please try again.");
         }
         finally
         {

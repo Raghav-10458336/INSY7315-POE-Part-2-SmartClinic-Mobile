@@ -4,9 +4,9 @@ namespace SmartClinic.Mobile.Services;
 
 public interface IDoctorService
 {
-    // Retrieves doctors available for patient appointment booking.
+    // Retrieves active doctors available for patient appointment booking.
     Task<List<Doctor>> GetDoctorsAsync();
 
-    // Retrieves available appointment slots for a selected doctor.
+    // Retrieves future available appointment slots for a selected doctor.
     Task<List<DoctorAvailability>> GetDoctorAvailabilityAsync(int doctorId);
 }

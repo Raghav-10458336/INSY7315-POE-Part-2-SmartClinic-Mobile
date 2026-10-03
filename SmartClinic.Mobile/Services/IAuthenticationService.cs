@@ -5,16 +5,16 @@ namespace SmartClinic.Mobile.Services;
 
 public interface IAuthenticationService
 {
-    // Sends the user's credentials to the API for authentication.
+    // Authenticates a user against the local account database.
     Task<LoginResponse> LoginAsync(LoginRequest request);
 
-    // Sends patient registration information to the API.
+    // Creates a new patient account and profile.
     Task<RegisterResponse> RegisterAsync(RegisterRequest request);
 
-    // Ends the local authenticated session and removes stored credentials.
+    // Ends the current authenticated session.
     Task LogoutAsync();
 
-    // Checks whether a valid authentication token is stored on the device.
+    // Checks whether a user currently has an authenticated session.
     Task<bool> IsAuthenticatedAsync();
 
     // Returns information about the currently authenticated user.

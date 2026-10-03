@@ -204,7 +204,7 @@
                     SemanticProperties.Description="Confirm password" />
             </Border>
 
-            <!-- Validation and API errors -->
+            <!-- Validation errors -->
             <Border
                 Margin="0,18,0,0"
                 Style="{StaticResource ErrorBannerStyle}"
@@ -269,7 +269,7 @@
                 Style="{StaticResource PrimaryButtonStyle}"
                 HeightRequest="52"
                 FontSize="16"
-                Command="{Binding RegisterCommand}"
+                Clicked="OnCreateAccountClicked"
                 IsEnabled="{Binding IsNotBusy}"
                 SemanticProperties.Description="Create SmartClinic account" />
 

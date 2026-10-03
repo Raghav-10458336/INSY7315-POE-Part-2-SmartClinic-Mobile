@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using SmartClinic.Mobile.DTOs;
 using SmartClinic.Mobile.Services;
-using System.Reflection;
 
 namespace SmartClinic.Mobile.ViewModels;
 

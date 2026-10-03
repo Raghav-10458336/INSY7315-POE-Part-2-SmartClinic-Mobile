@@ -8,6 +8,7 @@ namespace SmartClinic.Mobile.ViewModels;
 public partial class PatientProfileViewModel : BaseViewModel
 {
     private readonly IPatientService _patientService;
+    private readonly IAuthenticationService _authenticationService;
 
     [ObservableProperty]
     private Patient? patient;
@@ -27,10 +28,15 @@ public partial class PatientProfileViewModel : BaseViewModel
     [ObservableProperty]
     private bool hasSuccess;
 
+    // Allows the page to return to the login flow after sign out.
+    public event EventHandler? LogoutSucceeded;
+
     public PatientProfileViewModel(
-        IPatientService patientService)
+        IPatientService patientService,
+        IAuthenticationService authenticationService)
     {
         _patientService = patientService;
+        _authenticationService = authenticationService;
         Title = "My Profile";
     }
 
@@ -126,6 +132,34 @@ public partial class PatientProfileViewModel : BaseViewModel
 
         // Reload the saved profile to discard unsaved changes.
         await LoadProfileAsync();
+    }
+
+    [RelayCommand]
+    private async Task LogoutAsync()
+    {
+        if (IsBusy)
+        {
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+            ClearMessages();
+
+            // Remove the authenticated session from secure device storage.
+            await _authenticationService.LogoutAsync();
+
+            LogoutSucceeded?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception)
+        {
+            ShowError("Unable to sign out. Please try again.");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private bool ValidateProfile()

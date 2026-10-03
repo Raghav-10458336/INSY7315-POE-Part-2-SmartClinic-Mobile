@@ -19,7 +19,13 @@ public partial class CheckInQueueViewModel : BaseViewModel
     private bool hasQueueStatus;
 
     [ObservableProperty]
-    private bool canCheckIn = true;
+    private bool canCheckIn;
+
+    [ObservableProperty]
+    private bool isCheckInUnavailable;
+
+    [ObservableProperty]
+    private string checkInAvailabilityMessage = string.Empty;
 
     [ObservableProperty]
     private string errorMessage = string.Empty;
@@ -45,19 +51,27 @@ public partial class CheckInQueueViewModel : BaseViewModel
 
         QueueStatus = null;
         HasQueueStatus = false;
-        CanCheckIn = true;
+        CanCheckIn = false;
+        IsCheckInUnavailable = false;
+        CheckInAvailabilityMessage = string.Empty;
 
         ClearError();
         ClearSuccess();
 
         // Restore existing queue information if the patient is already checked in.
         await LoadQueueStatusAsync();
+
+        // If no queue exists yet, determine whether check-in is currently available.
+        if (!HasQueueStatus)
+        {
+            UpdateCheckInAvailability();
+        }
     }
 
     [RelayCommand]
     private async Task CheckInAsync()
     {
-        if (Appointment is null || IsBusy)
+        if (Appointment is null || IsBusy || !CanCheckIn)
         {
             return;
         }
@@ -69,19 +83,26 @@ public partial class CheckInQueueViewModel : BaseViewModel
         {
             IsBusy = true;
 
-            // Ask the backend to check the patient into this appointment.
+            // Check the patient into the appointment through the local queue service.
             var status = await _queueService.CheckInAsync(Appointment.Id);
 
             if (status is null)
             {
+                UpdateCheckInAvailability();
+
                 ShowError(
-                    "Unable to check in. Please confirm that your appointment is eligible for check-in.");
+                    "Unable to check in. Please confirm that your appointment is within the check-in window.");
+
                 return;
             }
 
             QueueStatus = status;
             HasQueueStatus = true;
             CanCheckIn = false;
+            IsCheckInUnavailable = false;
+
+            // Keep the in-memory appointment consistent with the persisted lifecycle.
+            Appointment.Status = AppointmentStatus.CheckedIn;
 
             SuccessMessage =
                 "You have checked in successfully. Your queue status is now available.";
@@ -121,7 +142,7 @@ public partial class CheckInQueueViewModel : BaseViewModel
                 ClearError();
             }
 
-            // Retrieve the latest queue position and status from the backend.
+            // Retrieve the patient's current local queue information.
             var status =
                 await _queueService.GetQueueStatusAsync(Appointment.Id);
 
@@ -138,7 +159,14 @@ public partial class CheckInQueueViewModel : BaseViewModel
 
             QueueStatus = status;
             HasQueueStatus = true;
-            CanCheckIn = !status.IsCheckedIn;
+            CanCheckIn = false;
+            IsCheckInUnavailable = false;
+
+            // An existing checked-in queue record represents an active check-in.
+            if (status.IsCheckedIn)
+            {
+                Appointment.Status = AppointmentStatus.CheckedIn;
+            }
         }
         catch (Exception)
         {
@@ -152,6 +180,58 @@ public partial class CheckInQueueViewModel : BaseViewModel
         {
             IsBusy = false;
         }
+    }
+
+    private void UpdateCheckInAvailability()
+    {
+        if (Appointment is null)
+        {
+            CanCheckIn = false;
+            IsCheckInUnavailable = false;
+            CheckInAvailabilityMessage = string.Empty;
+            return;
+        }
+
+        if (Appointment.Status != AppointmentStatus.Scheduled)
+        {
+            CanCheckIn = false;
+            IsCheckInUnavailable = false;
+            CheckInAvailabilityMessage = string.Empty;
+            return;
+        }
+
+        var now = DateTime.Now;
+        var checkInOpens =
+            Appointment.AppointmentDateTime.AddMinutes(-60);
+
+        var checkInCloses =
+            Appointment.AppointmentDateTime.AddMinutes(30);
+
+        if (now < checkInOpens)
+        {
+            CanCheckIn = false;
+            IsCheckInUnavailable = true;
+
+            CheckInAvailabilityMessage =
+                $"Check-in opens at {checkInOpens:HH:mm} on {checkInOpens:dd MMM yyyy}.";
+
+            return;
+        }
+
+        if (now > checkInCloses)
+        {
+            CanCheckIn = false;
+            IsCheckInUnavailable = true;
+
+            CheckInAvailabilityMessage =
+                "The check-in window for this appointment has closed.";
+
+            return;
+        }
+
+        CanCheckIn = true;
+        IsCheckInUnavailable = false;
+        CheckInAvailabilityMessage = string.Empty;
     }
 
     private void ShowError(string message)

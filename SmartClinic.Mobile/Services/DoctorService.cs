@@ -1,41 +1,38 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using SmartClinic.Mobile.Constants;
+﻿using SmartClinic.Mobile.Data;
 using SmartClinic.Mobile.Models;
 
 namespace SmartClinic.Mobile.Services;
 
 public class DoctorService : IDoctorService
 {
-    private readonly HttpClient _httpClient;
+    private readonly SmartClinicDatabase _smartClinicDatabase;
+    private readonly IAuthenticationService _authenticationService;
 
-    private const string TokenKey = "auth_token";
-
-    public DoctorService(HttpClient httpClient)
+    public DoctorService(
+        SmartClinicDatabase smartClinicDatabase,
+        IAuthenticationService authenticationService)
     {
-        _httpClient = httpClient;
+        _smartClinicDatabase = smartClinicDatabase;
+        _authenticationService = authenticationService;
     }
 
     public async Task<List<Doctor>> GetDoctorsAsync()
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
-
-            var response = await _httpClient.GetAsync(
-                ApiConstants.DoctorsEndpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (!await _authenticationService.IsAuthenticatedAsync())
             {
                 return [];
             }
 
-            return await response.Content.ReadFromJsonAsync<List<Doctor>>()
-                ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Only doctors currently accepting appointments are shown.
+            return await database.Table<Doctor>()
+                .Where(doctor => doctor.IsAvailable)
+                .OrderBy(doctor => doctor.LastName)
+                .ThenBy(doctor => doctor.FirstName)
+                .ToListAsync();
         }
         catch (Exception)
         {
@@ -48,46 +45,44 @@ public class DoctorService : IDoctorService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
-
-            var endpoint = string.Format(
-                ApiConstants.DoctorAvailabilityEndpoint,
-                doctorId);
-
-            var response = await _httpClient.GetAsync(endpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (!await _authenticationService.IsAuthenticatedAsync() ||
+                doctorId <= 0)
             {
                 return [];
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<List<DoctorAvailability>>()
-                ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            var doctor = await database.FindAsync<Doctor>(doctorId);
+
+            if (doctor is null || !doctor.IsAvailable)
+            {
+                return [];
+            }
+
+            var now = DateTime.Now;
+
+            // Only future slots that are still available can be booked.
+            var slots = await database.Table<DoctorAvailability>()
+                .Where(slot =>
+                    slot.DoctorId == doctorId &&
+                    slot.IsAvailable &&
+                    slot.StartDateTime > now)
+                .OrderBy(slot => slot.StartDateTime)
+                .ToListAsync();
+
+            // Populate display information from the authoritative doctor record.
+            foreach (var slot in slots)
+            {
+                slot.DoctorName = doctor.FullName;
+                slot.Specialisation = doctor.Specialisation;
+            }
+
+            return slots;
         }
         catch (Exception)
         {
             return [];
-        }
-    }
-
-    private async Task AddAuthenticationHeaderAsync()
-    {
-        var token = await SecureStorage.Default.GetAsync(TokenKey);
-
-        // Attach the patient's JWT to authenticated doctor requests.
-        if (!string.IsNullOrWhiteSpace(token))
-        {
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
-        }
-        else
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
         }
     }
 }

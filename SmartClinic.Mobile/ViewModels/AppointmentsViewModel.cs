@@ -47,14 +47,16 @@ public partial class AppointmentsViewModel : BaseViewModel
         {
             IsBusy = true;
             ClearError();
+            ClearSuccess();
 
             Appointments.Clear();
 
             // Retrieve appointments belonging to the authenticated patient.
-            var appointments = await _appointmentService.GetAppointmentsAsync();
+            var appointments =
+                await _appointmentService.GetAppointmentsAsync();
 
-            
-            foreach (var appointment in appointments.OrderBy(a => a.AppointmentDateTime))
+            foreach (var appointment in appointments
+                         .OrderBy(a => a.AppointmentDateTime))
             {
                 Appointments.Add(appointment);
             }
@@ -85,11 +87,12 @@ public partial class AppointmentsViewModel : BaseViewModel
         ClearError();
         ClearSuccess();
 
-        // Completed or already cancelled appointments cannot be cancelled.
-        if (appointment.Status == AppointmentStatus.Completed ||
-            appointment.Status == AppointmentStatus.Cancelled)
+        // Only appointments that have not entered the clinic workflow
+        // can still be cancelled by the patient.
+        if (appointment.Status != AppointmentStatus.Scheduled &&
+            appointment.Status != AppointmentStatus.Confirmed)
         {
-            ShowError("This appointment cannot be cancelled.");
+            ShowError("This appointment can no longer be cancelled.");
             return;
         }
 
@@ -97,13 +100,15 @@ public partial class AppointmentsViewModel : BaseViewModel
         {
             IsBusy = true;
 
-            // Request cancellation of the selected appointment.
             var wasCancelled =
-                await _appointmentService.CancelAppointmentAsync(appointment.Id);
+                await _appointmentService.CancelAppointmentAsync(
+                    appointment.Id);
 
             if (!wasCancelled)
             {
-                ShowError("Unable to cancel the appointment. Please try again.");
+                ShowError(
+                    "Unable to cancel the appointment. Please try again.");
+
                 return;
             }
 
@@ -111,12 +116,15 @@ public partial class AppointmentsViewModel : BaseViewModel
             Appointments.Remove(appointment);
             UpdateAppointmentState();
 
-            SuccessMessage = "Your appointment has been cancelled successfully.";
+            SuccessMessage =
+                "Your appointment has been cancelled successfully.";
+
             HasSuccess = true;
         }
         catch (Exception)
         {
-            ShowError("Unable to cancel the appointment. Please try again.");
+            ShowError(
+                "Unable to cancel the appointment. Please try again.");
         }
         finally
         {

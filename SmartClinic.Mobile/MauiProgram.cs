@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using SmartClinic.Mobile.Constants;
+using SmartClinic.Mobile.Data;
 using SmartClinic.Mobile.Services;
 using SmartClinic.Mobile.ViewModels;
 using SmartClinic.Mobile.Views;
@@ -11,6 +11,7 @@ namespace SmartClinic.Mobile
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -19,22 +20,15 @@ namespace SmartClinic.Mobile
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-
-
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
-            // Configure the HTTP client used for communication with the Smart Clinic API.
-            builder.Services.AddSingleton(new HttpClient
-            {
-                BaseAddress = new Uri(ApiConstants.BaseUrl)
-            });
+            // Register the local SQLite database used by mobile services.
+            builder.Services.AddSingleton<SmartClinicDatabase>();
 
-            // Register authentication services for dependency injection.
+            // Register application services.
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
-
-            // Register patient services used for authenticated profile operations.
             builder.Services.AddSingleton<IPatientService, PatientService>();
             builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
             builder.Services.AddSingleton<IDoctorService, DoctorService>();
@@ -42,7 +36,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddSingleton<IClinicalService, ClinicalService>();
             builder.Services.AddSingleton<INotificationService, NotificationService>();
 
-            // Register authentication ViewModels used by the mobile interface.
+            // Register ViewModels.
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<PatientDashboardViewModel>();
@@ -56,7 +50,7 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<NotificationsViewModel>();
             builder.Services.AddTransient<PatientProfileViewModel>();
 
-            // Register authentication pages for dependency injection.
+            // Register application pages.
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<PatientDashboardPage>();
@@ -69,8 +63,6 @@ namespace SmartClinic.Mobile
             builder.Services.AddTransient<PrescriptionsPage>();
             builder.Services.AddTransient<NotificationsPage>();
             builder.Services.AddTransient<PatientProfilePage>();
-
-
 
             return builder.Build();
         }

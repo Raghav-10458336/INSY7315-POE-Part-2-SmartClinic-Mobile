@@ -109,7 +109,7 @@ public partial class NotificationsViewModel : BaseViewModel
 
             notification.IsRead = true;
 
-            // Refresh the collection so the updated read state is displayed.
+            // Replace the item so the UI refreshes its read state.
             var index = Notifications.IndexOf(notification);
 
             if (index >= 0)
@@ -154,9 +154,12 @@ public partial class NotificationsViewModel : BaseViewModel
                 return;
             }
 
-            foreach (var notification in Notifications)
+            // Update and replace every item so the UI refreshes immediately.
+            for (var index = 0; index < Notifications.Count; index++)
             {
+                var notification = Notifications[index];
                 notification.IsRead = true;
+                Notifications[index] = notification;
             }
 
             UpdateNotificationState();

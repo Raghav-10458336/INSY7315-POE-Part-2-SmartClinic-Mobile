@@ -15,6 +15,9 @@ public partial class BookAppointmentViewModel : BaseViewModel
     public ObservableCollection<Doctor> Doctors { get; } = [];
     public ObservableCollection<DoctorAvailability> AvailableSlots { get; } = [];
 
+    // Notifies the page when a booking has completed successfully.
+    public event EventHandler? AppointmentBooked;
+
     [ObservableProperty]
     private Doctor? selectedDoctor;
 
@@ -68,6 +71,7 @@ public partial class BookAppointmentViewModel : BaseViewModel
         ClearError();
         ClearSuccess();
     }
+
     public async Task LoadDoctorsAsync()
     {
         if (IsBusy)
@@ -193,7 +197,7 @@ public partial class BookAppointmentViewModel : BaseViewModel
                 ReasonForVisit = ReasonForVisit.Trim()
             };
 
-            // Submit the appointment through the authenticated API service.
+            // Create the appointment through the local appointment service.
             var appointment =
                 await _appointmentService.CreateAppointmentAsync(request);
 
@@ -205,6 +209,9 @@ public partial class BookAppointmentViewModel : BaseViewModel
 
             SuccessMessage = "Your appointment has been booked successfully.";
             HasSuccess = true;
+
+            // Allow the page to return to the appointments list after success.
+            AppointmentBooked?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception)
         {

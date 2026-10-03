@@ -1,42 +1,39 @@
-﻿using SmartClinic.Mobile.Constants;
+﻿using SmartClinic.Mobile.Data;
 using SmartClinic.Mobile.Models;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace SmartClinic.Mobile.Services;
 
 public class ClinicalService : IClinicalService
 {
-    private readonly HttpClient _httpClient;
+    private readonly SmartClinicDatabase _smartClinicDatabase;
+    private readonly IAuthenticationService _authenticationService;
 
-    private const string TokenKey = "auth_token";
-
-    public ClinicalService(HttpClient httpClient)
+    public ClinicalService(
+        SmartClinicDatabase smartClinicDatabase,
+        IAuthenticationService authenticationService)
     {
-        _httpClient = httpClient;
+        _smartClinicDatabase = smartClinicDatabase;
+        _authenticationService = authenticationService;
     }
 
     public async Task<List<Consultation>> GetConsultationsAsync()
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
+            var patient = await GetCurrentPatientAsync();
 
-            // Retrieve consultation history for the authenticated patient.
-            var response = await _httpClient.GetAsync(
-                ApiConstants.ConsultationsEndpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (patient is null)
             {
                 return [];
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<List<Consultation>>() ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Return only consultation records belonging to the signed-in patient.
+            return await database.Table<Consultation>()
+                .Where(consultation => consultation.PatientId == patient.Id)
+                .OrderByDescending(consultation => consultation.ConsultationDate)
+                .ToListAsync();
         }
         catch (Exception)
         {
@@ -49,26 +46,26 @@ public class ClinicalService : IClinicalService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
-
-            // Retrieve the full record for the selected consultation.
-            var endpoint = string.Format(
-                ApiConstants.ConsultationDetailsEndpoint,
-                consultationId);
-
-            var response = await _httpClient.GetAsync(endpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (consultationId <= 0)
             {
                 return null;
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<Consultation>();
-        }
-        catch (HttpRequestException)
-        {
-            return null;
+            var patient = await GetCurrentPatientAsync();
+
+            if (patient is null)
+            {
+                return null;
+            }
+
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Patient ownership is verified before clinical details are exposed.
+            return await database.Table<Consultation>()
+                .Where(consultation =>
+                    consultation.Id == consultationId &&
+                    consultation.PatientId == patient.Id)
+                .FirstOrDefaultAsync();
         }
         catch (Exception)
         {
@@ -80,23 +77,20 @@ public class ClinicalService : IClinicalService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
+            var patient = await GetCurrentPatientAsync();
 
-            // Retrieve all prescriptions belonging to the authenticated patient.
-            var response = await _httpClient.GetAsync(
-                ApiConstants.PrescriptionsEndpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (patient is null)
             {
                 return [];
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<List<Prescription>>() ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Return the patient's prescription history newest first.
+            return await database.Table<Prescription>()
+                .Where(prescription => prescription.PatientId == patient.Id)
+                .OrderByDescending(prescription => prescription.IssuedDate)
+                .ToListAsync();
         }
         catch (Exception)
         {
@@ -109,26 +103,38 @@ public class ClinicalService : IClinicalService
     {
         try
         {
-            await AddAuthenticationHeaderAsync();
-
-            // Retrieve prescriptions issued during the selected consultation.
-            var endpoint = string.Format(
-                ApiConstants.ConsultationPrescriptionsEndpoint,
-                consultationId);
-
-            var response = await _httpClient.GetAsync(endpoint);
-
-            if (!response.IsSuccessStatusCode)
+            if (consultationId <= 0)
             {
                 return [];
             }
 
-            return await response.Content
-                .ReadFromJsonAsync<List<Prescription>>() ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            return [];
+            var patient = await GetCurrentPatientAsync();
+
+            if (patient is null)
+            {
+                return [];
+            }
+
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            // Verify that the consultation belongs to the signed-in patient.
+            var consultation = await database.Table<Consultation>()
+                .Where(existing =>
+                    existing.Id == consultationId &&
+                    existing.PatientId == patient.Id)
+                .FirstOrDefaultAsync();
+
+            if (consultation is null)
+            {
+                return [];
+            }
+
+            return await database.Table<Prescription>()
+                .Where(prescription =>
+                    prescription.ConsultationId == consultation.Id &&
+                    prescription.PatientId == patient.Id)
+                .OrderByDescending(prescription => prescription.IssuedDate)
+                .ToListAsync();
         }
         catch (Exception)
         {
@@ -136,19 +142,22 @@ public class ClinicalService : IClinicalService
         }
     }
 
-    private async Task AddAuthenticationHeaderAsync()
+    private async Task<Patient?> GetCurrentPatientAsync()
     {
-        var token = await SecureStorage.Default.GetAsync(TokenKey);
+        var authenticationState =
+            await _authenticationService.GetAuthenticationStateAsync();
 
-        // Attach the patient's JWT to protected clinical API requests.
-        if (!string.IsNullOrWhiteSpace(token))
+        if (!authenticationState.IsAuthenticated ||
+            authenticationState.UserId is null)
         {
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            return null;
         }
-        else
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-        }
+
+        var database = await _smartClinicDatabase.GetConnectionAsync();
+        var userId = authenticationState.UserId.Value;
+
+        return await database.Table<Patient>()
+            .Where(patient => patient.UserId == userId)
+            .FirstOrDefaultAsync();
     }
 }

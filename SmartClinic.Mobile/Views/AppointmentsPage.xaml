@@ -212,19 +212,188 @@
 
                                     </VerticalStackLayout>
 
+                                    <!-- Status badge -->
                                     <Border
                                         Grid.Column="1"
                                         Padding="9,5"
                                         VerticalOptions="Start"
-                                        BackgroundColor="{StaticResource PrimaryLight}"
                                         StrokeThickness="0"
                                         StrokeShape="RoundRectangle 8">
+
+                                        <Border.Triggers>
+
+                                            <!-- Scheduled -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.Scheduled}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource PrimaryLight}" />
+                                            </DataTrigger>
+
+                                            <!-- Confirmed -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.Confirmed}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource PrimaryLight}" />
+                                            </DataTrigger>
+
+                                            <!-- Checked in -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.CheckedIn}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource WarningLight}" />
+                                            </DataTrigger>
+
+                                            <!-- Waiting in queue -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.InQueue}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource WarningLight}" />
+                                            </DataTrigger>
+
+                                            <!-- Consultation in progress -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.InConsultation}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource PrimaryLight}" />
+                                            </DataTrigger>
+
+                                            <!-- Completed -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.Completed}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource SuccessLight}" />
+                                            </DataTrigger>
+
+                                            <!-- Cancelled -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.Cancelled}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource ErrorLight}" />
+                                            </DataTrigger>
+
+                                            <!-- No show -->
+                                            <DataTrigger
+                                                TargetType="Border"
+                                                Binding="{Binding Status}"
+                                                Value="{x:Static models:AppointmentStatus.NoShow}">
+                                                <Setter
+                                                    Property="BackgroundColor"
+                                                    Value="{StaticResource ErrorLight}" />
+                                            </DataTrigger>
+
+                                        </Border.Triggers>
 
                                         <Label
                                             Text="{Binding Status}"
                                             FontFamily="OpenSansSemibold"
-                                            FontSize="11"
-                                            TextColor="{StaticResource Primary}" />
+                                            FontSize="11">
+
+                                            <Label.Triggers>
+
+                                                <!-- Scheduled -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.Scheduled}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Primary}" />
+                                                </DataTrigger>
+
+                                                <!-- Confirmed -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.Confirmed}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Primary}" />
+                                                </DataTrigger>
+
+                                                <!-- Checked in -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.CheckedIn}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Warning}" />
+                                                </DataTrigger>
+
+                                                <!-- Waiting in queue -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.InQueue}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Warning}" />
+                                                </DataTrigger>
+
+                                                <!-- Consultation in progress -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.InConsultation}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Primary}" />
+                                                </DataTrigger>
+
+                                                <!-- Completed -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.Completed}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Success}" />
+                                                </DataTrigger>
+
+                                                <!-- Cancelled -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.Cancelled}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Error}" />
+                                                </DataTrigger>
+
+                                                <!-- No show -->
+                                                <DataTrigger
+                                                    TargetType="Label"
+                                                    Binding="{Binding Status}"
+                                                    Value="{x:Static models:AppointmentStatus.NoShow}">
+                                                    <Setter
+                                                        Property="TextColor"
+                                                        Value="{StaticResource Error}" />
+                                                </DataTrigger>
+
+                                            </Label.Triggers>
+
+                                        </Label>
 
                                     </Border>
 
@@ -292,11 +461,12 @@
 
                                 </VerticalStackLayout>
 
-                                <!-- Appointment management actions -->
+                                <!-- Active appointment management actions -->
                                 <Grid
                                     Margin="0,3,0,0"
                                     ColumnDefinitions="*,*"
-                                    ColumnSpacing="10">
+                                    ColumnSpacing="10"
+                                    IsVisible="{Binding CanManage}">
 
                                     <Button
                                         Grid.Column="0"
@@ -316,13 +486,14 @@
 
                                 </Grid>
 
-                                <!-- Patient check-in and queue action -->
+                                <!-- Check-in or existing queue access -->
                                 <Button
-                                    Text="Check In &amp; View Queue"
+                                    Text="{Binding QueueActionText}"
+                                    IsVisible="{Binding CanAccessCheckIn}"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     FontSize="13"
                                     Clicked="OnCheckInAppointmentClicked"
-                                    SemanticProperties.Description="Check in and view queue status" />
+                                    SemanticProperties.Description="Check in or view queue status" />
 
                             </VerticalStackLayout>
 

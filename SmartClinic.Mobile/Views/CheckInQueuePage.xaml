@@ -28,7 +28,7 @@
 
             <!-- Appointment summary -->
             <Label
-                Text="Today's appointment"
+                Text="Appointment details"
                 Margin="0,28,0,10"
                 Style="{StaticResource SectionTitleStyle}"
                 SemanticProperties.HeadingLevel="Level2" />
@@ -206,6 +206,61 @@
 
             </Border>
 
+            <!-- Check-in unavailable information -->
+            <Border
+                Margin="0,22,0,0"
+                Style="{StaticResource CardStyle}"
+                IsVisible="{Binding IsCheckInUnavailable}">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Grid
+                        ColumnDefinitions="Auto,*"
+                        ColumnSpacing="13">
+
+                        <Border
+                            Grid.Column="0"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            VerticalOptions="Start"
+                            BackgroundColor="{StaticResource WarningLight}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12">
+
+                            <Label
+                                Text="TIME"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="10"
+                                TextColor="{StaticResource Warning}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
+
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="4"
+                            VerticalOptions="Center">
+
+                            <Label
+                                Text="Check-in is not available yet"
+                                Style="{StaticResource CardTitleStyle}"
+                                FontSize="17" />
+
+                            <Label
+                                Text="{Binding CheckInAvailabilityMessage}"
+                                Style="{StaticResource MutedTextStyle}"
+                                FontSize="13"
+                                LineBreakMode="WordWrap" />
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
             <!-- Check-in action -->
             <Border
                 Margin="0,22,0,0"
@@ -268,7 +323,7 @@
 
             </Border>
 
-            <!-- Live queue information -->
+            <!-- Queue information -->
             <Border
                 Margin="0,22,0,0"
                 Style="{StaticResource CardStyle}"
@@ -291,7 +346,7 @@
                                 SemanticProperties.HeadingLevel="Level2" />
 
                             <Label
-                                Text="Live information from the clinic queue."
+                                Text="Your current clinic queue information."
                                 Style="{StaticResource MutedTextStyle}"
                                 FontSize="12" />
 

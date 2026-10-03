@@ -1,5 +1,6 @@
-﻿using System.Net.Http.Json;
-using SmartClinic.Mobile.Constants;
+﻿using System.Net.Mail;
+using Microsoft.AspNetCore.Identity;
+using SmartClinic.Mobile.Data;
 using SmartClinic.Mobile.DTOs;
 using SmartClinic.Mobile.Models;
 
@@ -7,62 +8,88 @@ namespace SmartClinic.Mobile.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly HttpClient _httpClient;
+    private readonly SmartClinicDatabase _smartClinicDatabase;
+    private readonly PasswordHasher<User> _passwordHasher = new();
 
-    private const string TokenKey = "auth_token";
+    private const string SessionKey = "authenticated_session";
     private const string UserIdKey = "user_id";
     private const string FirstNameKey = "first_name";
     private const string LastNameKey = "last_name";
     private const string EmailKey = "email";
     private const string RoleKey = "user_role";
 
-    public AuthenticationService(HttpClient httpClient)
+    public AuthenticationService(SmartClinicDatabase smartClinicDatabase)
     {
-        _httpClient = httpClient;
+        _smartClinicDatabase = smartClinicDatabase;
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(
-                ApiConstants.LoginEndpoint,
-                request);
-
-            // Attempt to read the API response even when login is rejected.
-            var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-
-            if (!response.IsSuccessStatusCode || result is null)
+            if (string.IsNullOrWhiteSpace(request.Email) ||
+                string.IsNullOrWhiteSpace(request.Password))
             {
                 return new LoginResponse
                 {
                     IsSuccess = false,
-                    Message = result?.Message ?? "Unable to sign in. Please try again."
+                    Message = "Email and password are required."
                 };
             }
 
-            if (!result.IsSuccess || string.IsNullOrWhiteSpace(result.Token))
+            var email = NormalizeEmail(request.Email);
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            var user = await database.Table<User>()
+                .Where(existingUser => existingUser.Email == email)
+                .FirstOrDefaultAsync();
+
+            if (user is null)
             {
-                return result;
+                return InvalidCredentials();
             }
 
-            // Store sensitive authentication information using device secure storage.
-            await SecureStorage.Default.SetAsync(TokenKey, result.Token);
+            if (!user.IsActive)
+            {
+                return new LoginResponse
+                {
+                    IsSuccess = false,
+                    Message = "This account is currently inactive."
+                };
+            }
 
-            await SecureStorage.Default.SetAsync(UserIdKey, result.UserId.ToString());
-            await SecureStorage.Default.SetAsync(FirstNameKey, result.FirstName);
-            await SecureStorage.Default.SetAsync(LastNameKey, result.LastName);
-            await SecureStorage.Default.SetAsync(EmailKey, result.Email);
-            await SecureStorage.Default.SetAsync(RoleKey, result.Role.ToString());
+            var verificationResult = _passwordHasher.VerifyHashedPassword(
+                user,
+                user.PasswordHash,
+                request.Password);
 
-            return result;
-        }
-        catch (HttpRequestException)
-        {
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                return InvalidCredentials();
+            }
+
+            // Refresh older password hashes when the framework recommends it.
+            if (verificationResult ==
+                PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.PasswordHash = _passwordHasher.HashPassword(
+                    user,
+                    request.Password);
+
+                await database.UpdateAsync(user);
+            }
+
+            await SaveSessionAsync(user);
+
             return new LoginResponse
             {
-                IsSuccess = false,
-                Message = "Unable to connect to the clinic server."
+                IsSuccess = true,
+                Message = "Sign in successful.",
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role
             };
         }
         catch (Exception)
@@ -79,29 +106,77 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(
-                ApiConstants.RegisterEndpoint,
-                request);
+            var validationMessage = ValidateRegistration(request);
 
-            var result = await response.Content.ReadFromJsonAsync<RegisterResponse>();
-
-            if (result is not null)
+            if (validationMessage is not null)
             {
-                return result;
+                return new RegisterResponse
+                {
+                    IsSuccess = false,
+                    Message = validationMessage
+                };
+            }
+
+            var email = NormalizeEmail(request.Email);
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+
+            var existingUser = await database.Table<User>()
+                .Where(user => user.Email == email)
+                .FirstOrDefaultAsync();
+
+            if (existingUser is not null)
+            {
+                return new RegisterResponse
+                {
+                    IsSuccess = false,
+                    Message =
+                        "An account with this email address already exists."
+                };
+            }
+
+            var user = new User
+            {
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
+                Email = email,
+                Role = UserRole.Patient,
+                IsActive = true
+            };
+
+            // Only the generated password hash is persisted.
+            user.PasswordHash = _passwordHasher.HashPassword(
+                user,
+                request.Password);
+
+            await database.InsertAsync(user);
+
+            try
+            {
+                var patient = new Patient
+                {
+                    UserId = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = request.PhoneNumber.Trim(),
+                    DateOfBirth = request.DateOfBirth.Date,
+                    Gender = request.Gender.Trim()
+                };
+
+                await database.InsertAsync(patient);
+            }
+            catch
+            {
+                // Prevent a partial account if patient creation fails.
+                await database.DeleteAsync(user);
+                throw;
             }
 
             return new RegisterResponse
             {
-                IsSuccess = false,
-                Message = "Unable to create the account. Please try again."
-            };
-        }
-        catch (HttpRequestException)
-        {
-            return new RegisterResponse
-            {
-                IsSuccess = false,
-                Message = "Unable to connect to the clinic server."
+                IsSuccess = true,
+                Message = "Account created successfully.",
+                UserId = user.Id
             };
         }
         catch (Exception)
@@ -109,20 +184,15 @@ public class AuthenticationService : IAuthenticationService
             return new RegisterResponse
             {
                 IsSuccess = false,
-                Message = "An unexpected error occurred while creating the account."
+                Message =
+                    "An unexpected error occurred while creating the account."
             };
         }
     }
 
     public Task LogoutAsync()
     {
-        // Remove all locally stored authentication information.
-        SecureStorage.Default.Remove(TokenKey);
-        SecureStorage.Default.Remove(UserIdKey);
-        SecureStorage.Default.Remove(FirstNameKey);
-        SecureStorage.Default.Remove(LastNameKey);
-        SecureStorage.Default.Remove(EmailKey);
-        SecureStorage.Default.Remove(RoleKey);
+        ClearSession();
 
         return Task.CompletedTask;
     }
@@ -131,9 +201,20 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var token = await SecureStorage.Default.GetAsync(TokenKey);
+            var session = await SecureStorage.Default.GetAsync(SessionKey);
+            var userIdValue = await SecureStorage.Default.GetAsync(UserIdKey);
 
-            return !string.IsNullOrWhiteSpace(token);
+            if (session != "active" ||
+                !int.TryParse(userIdValue, out var userId) ||
+                userId <= 0)
+            {
+                return false;
+            }
+
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+            var user = await database.FindAsync<User>(userId);
+
+            return user is not null && user.IsActive;
         }
         catch (Exception)
         {
@@ -145,35 +226,180 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var token = await SecureStorage.Default.GetAsync(TokenKey);
-
-            if (string.IsNullOrWhiteSpace(token))
+            if (!await IsAuthenticatedAsync())
             {
                 return new AuthenticationState();
             }
 
-            var userIdValue = await SecureStorage.Default.GetAsync(UserIdKey);
-            var firstName = await SecureStorage.Default.GetAsync(FirstNameKey);
-            var lastName = await SecureStorage.Default.GetAsync(LastNameKey);
-            var email = await SecureStorage.Default.GetAsync(EmailKey);
-            var roleValue = await SecureStorage.Default.GetAsync(RoleKey);
+            var userIdValue =
+                await SecureStorage.Default.GetAsync(UserIdKey);
 
-            int.TryParse(userIdValue, out var userId);
-            Enum.TryParse<UserRole>(roleValue, out var role);
+            if (!int.TryParse(userIdValue, out var userId))
+            {
+                return new AuthenticationState();
+            }
+
+            var database = await _smartClinicDatabase.GetConnectionAsync();
+            var user = await database.FindAsync<User>(userId);
+
+            if (user is null || !user.IsActive)
+            {
+                ClearSession();
+                return new AuthenticationState();
+            }
 
             return new AuthenticationState
             {
                 IsAuthenticated = true,
-                UserId = userId,
-                FirstName = firstName ?? string.Empty,
-                LastName = lastName ?? string.Empty,
-                Email = email ?? string.Empty,
-                Role = role
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role
             };
         }
         catch (Exception)
         {
             return new AuthenticationState();
         }
+    }
+
+    private static string? ValidateRegistration(RegisterRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.FirstName) ||
+            string.IsNullOrWhiteSpace(request.LastName))
+        {
+            return "First name and last name are required.";
+        }
+
+        if (request.FirstName.Trim().Length < 2 ||
+            request.LastName.Trim().Length < 2)
+        {
+            return "Please enter a valid first name and last name.";
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Email) ||
+            !IsValidEmail(request.Email))
+        {
+            return "Please enter a valid email address.";
+        }
+
+        if (string.IsNullOrWhiteSpace(request.PhoneNumber))
+        {
+            return "Phone number is required.";
+        }
+
+        var phoneNumber = request.PhoneNumber.Trim();
+
+        if (phoneNumber.Length < 7 || phoneNumber.Length > 20)
+        {
+            return "Please enter a valid phone number.";
+        }
+
+        if (request.DateOfBirth == default ||
+            request.DateOfBirth.Date > DateTime.Today)
+        {
+            return "Please enter a valid date of birth.";
+        }
+
+        if (request.DateOfBirth.Date >
+            DateTime.Today.AddYears(-13))
+        {
+            return "Patients must be at least 13 years old to register.";
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Gender))
+        {
+            return "Gender is required.";
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Password) ||
+            request.Password.Length < 8)
+        {
+            return "Password must contain at least 8 characters.";
+        }
+
+        if (!request.Password.Any(char.IsUpper) ||
+            !request.Password.Any(char.IsLower) ||
+            !request.Password.Any(char.IsDigit))
+        {
+            return
+                "Password must include an uppercase letter, lowercase letter and number.";
+        }
+
+        if (request.Password != request.ConfirmPassword)
+        {
+            return "Passwords do not match.";
+        }
+
+        return null;
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        try
+        {
+            var trimmedEmail = email.Trim();
+            var address = new MailAddress(trimmedEmail);
+
+            return string.Equals(
+                address.Address,
+                trimmedEmail,
+                StringComparison.OrdinalIgnoreCase);
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
+
+    private static string NormalizeEmail(string email)
+    {
+        return email.Trim().ToLowerInvariant();
+    }
+
+    private async Task SaveSessionAsync(User user)
+    {
+        // SecureStorage holds session information, never the user's password.
+        await SecureStorage.Default.SetAsync(SessionKey, "active");
+        await SecureStorage.Default.SetAsync(
+            UserIdKey,
+            user.Id.ToString());
+
+        await SecureStorage.Default.SetAsync(
+            FirstNameKey,
+            user.FirstName);
+
+        await SecureStorage.Default.SetAsync(
+            LastNameKey,
+            user.LastName);
+
+        await SecureStorage.Default.SetAsync(
+            EmailKey,
+            user.Email);
+
+        await SecureStorage.Default.SetAsync(
+            RoleKey,
+            user.Role.ToString());
+    }
+
+    private static void ClearSession()
+    {
+        SecureStorage.Default.Remove(SessionKey);
+        SecureStorage.Default.Remove(UserIdKey);
+        SecureStorage.Default.Remove(FirstNameKey);
+        SecureStorage.Default.Remove(LastNameKey);
+        SecureStorage.Default.Remove(EmailKey);
+        SecureStorage.Default.Remove(RoleKey);
+    }
+
+    private static LoginResponse InvalidCredentials()
+    {
+        // Avoid revealing whether a specific email account exists.
+        return new LoginResponse
+        {
+            IsSuccess = false,
+            Message = "Invalid email or password."
+        };
     }
 }
