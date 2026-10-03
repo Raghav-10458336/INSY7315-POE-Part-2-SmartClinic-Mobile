@@ -34,8 +34,8 @@ jobs:
       - name: Restore test project
         run: dotnet restore SmartClinic.Mobile.Tests/SmartClinic.Mobile.Tests.csproj
 
-      - name: Build mobile project
-        run: dotnet build SmartClinic.Mobile/SmartClinic.Mobile.csproj --configuration Release --no-restore
+      - name: Build Android mobile project
+        run: dotnet build SmartClinic.Mobile/SmartClinic.Mobile.csproj --framework net10.0-android --configuration Release --no-restore
 
       - name: Run automated tests
         run: dotnet test SmartClinic.Mobile.Tests/SmartClinic.Mobile.Tests.csproj --configuration Release --no-restore --verbosity normal
