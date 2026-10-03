@@ -1,4 +1,6 @@
-﻿using SQLite;
+﻿using SmartClinic.Mobile.Services;
+using SQLite;
+
 
 namespace SmartClinic.Mobile.Models;
 
@@ -43,23 +45,17 @@ public class Appointment
     // UI helpers are calculated from the appointment lifecycle and are not stored.
     [Ignore]
     public bool CanManage =>
-        Status == AppointmentStatus.Scheduled ||
-        Status == AppointmentStatus.Confirmed;
+    AppointmentRules.CanManage(Status);
 
     [Ignore]
     public bool CanAccessCheckIn =>
-        Status == AppointmentStatus.Scheduled ||
-        Status == AppointmentStatus.CheckedIn ||
-        Status == AppointmentStatus.InQueue;
+        AppointmentRules.CanAccessCheckIn(Status);
 
     [Ignore]
     public bool IsQueueActive =>
-        Status == AppointmentStatus.CheckedIn ||
-        Status == AppointmentStatus.InQueue;
+        AppointmentRules.IsQueueActive(Status);
 
     [Ignore]
     public string QueueActionText =>
-        IsQueueActive
-            ? "View Queue Status"
-            : "Check In & View Queue";
+        AppointmentRules.GetQueueActionText(Status);
 }

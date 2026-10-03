@@ -1,5 +1,4 @@
-﻿using System.Net.Mail;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using SmartClinic.Mobile.Data;
 using SmartClinic.Mobile.DTOs;
 using SmartClinic.Mobile.Models;
@@ -272,14 +271,13 @@ public class AuthenticationService : IAuthenticationService
             return "First name and last name are required.";
         }
 
-        if (request.FirstName.Trim().Length < 2 ||
-            request.LastName.Trim().Length < 2)
+        if (!RegistrationRules.IsValidName(request.FirstName) ||
+            !RegistrationRules.IsValidName(request.LastName))
         {
             return "Please enter a valid first name and last name.";
         }
 
-        if (string.IsNullOrWhiteSpace(request.Email) ||
-            !IsValidEmail(request.Email))
+        if (!RegistrationRules.IsValidEmail(request.Email))
         {
             return "Please enter a valid email address.";
         }
@@ -289,26 +287,27 @@ public class AuthenticationService : IAuthenticationService
             return "Phone number is required.";
         }
 
-        var phoneNumber = request.PhoneNumber.Trim();
-
-        if (phoneNumber.Length < 7 || phoneNumber.Length > 20)
+        if (!RegistrationRules.IsValidPhoneNumber(request.PhoneNumber))
         {
             return "Please enter a valid phone number.";
         }
 
         if (request.DateOfBirth == default ||
-            request.DateOfBirth.Date > DateTime.Today)
+            !RegistrationRules.IsValidDateOfBirth(
+                request.DateOfBirth,
+                DateTime.Today))
         {
             return "Please enter a valid date of birth.";
         }
 
-        if (request.DateOfBirth.Date >
-            DateTime.Today.AddYears(-13))
+        if (!RegistrationRules.MeetsMinimumAge(
+                request.DateOfBirth,
+                DateTime.Today))
         {
             return "Patients must be at least 13 years old to register.";
         }
 
-        if (string.IsNullOrWhiteSpace(request.Gender))
+        if (!RegistrationRules.IsValidGender(request.Gender))
         {
             return "Gender is required.";
         }
@@ -319,38 +318,20 @@ public class AuthenticationService : IAuthenticationService
             return "Password must contain at least 8 characters.";
         }
 
-        if (!request.Password.Any(char.IsUpper) ||
-            !request.Password.Any(char.IsLower) ||
-            !request.Password.Any(char.IsDigit))
+        if (!RegistrationRules.IsValidPassword(request.Password))
         {
             return
                 "Password must include an uppercase letter, lowercase letter and number.";
         }
 
-        if (request.Password != request.ConfirmPassword)
+        if (!RegistrationRules.PasswordsMatch(
+                request.Password,
+                request.ConfirmPassword))
         {
             return "Passwords do not match.";
         }
 
         return null;
-    }
-
-    private static bool IsValidEmail(string email)
-    {
-        try
-        {
-            var trimmedEmail = email.Trim();
-            var address = new MailAddress(trimmedEmail);
-
-            return string.Equals(
-                address.Address,
-                trimmedEmail,
-                StringComparison.OrdinalIgnoreCase);
-        }
-        catch (FormatException)
-        {
-            return false;
-        }
     }
 
     private static string NormalizeEmail(string email)

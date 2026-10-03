@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="SmartClinic.Mobile.csproj" />
+  <Project Path="../SmartClinic.Mobile.Tests/SmartClinic.Mobile.Tests.csproj" Id="d38b9611-99bd-4110-afed-8da4ee9ac21f" />
+  <Project Path="SmartClinic.Mobile.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>
