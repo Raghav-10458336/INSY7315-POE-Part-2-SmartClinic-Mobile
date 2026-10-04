@@ -1,4 +1,4 @@
-name: SmartClinic Mobile CI
+name: SmartClinic Mobile CI/CD
 
 on:
   push:
@@ -12,8 +12,8 @@ on:
       - main
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  build-test-package:
+    name: Build, Test and Package Android App
     runs-on: windows-latest
 
     steps:
@@ -39,3 +39,20 @@ jobs:
 
       - name: Run automated tests
         run: dotnet test SmartClinic.Mobile.Tests/SmartClinic.Mobile.Tests.csproj --configuration Release --no-restore --verbosity normal
+
+      - name: Publish Android APK
+        run: >
+          dotnet publish SmartClinic.Mobile/SmartClinic.Mobile.csproj
+          --framework net10.0-android
+          --configuration Release
+          --no-restore
+          -p:AndroidPackageFormats=apk
+          -p:AndroidKeyStore=false
+
+      - name: Upload Android APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartClinic-Android-APK
+          path: SmartClinic.Mobile/bin/Release/net10.0-android/publish/*.apk
+          if-no-files-found: error
+          retention-days: 30
