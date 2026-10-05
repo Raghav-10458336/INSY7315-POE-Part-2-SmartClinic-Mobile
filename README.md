@@ -38,6 +38,9 @@ https://youtu.be/K_AnSycwy0M
 **Group Presentation YouTube Video:**  
 https://youtu.be/VMjPiho9LpU
 
+**Live SmartClinic Website:** 
+https://smartclinicmanagementsystem-apd0d2gqb6ftakbv.southafricanorth-01.azurewebsites.net/
+
 ---
 
 ## Android APK Download
