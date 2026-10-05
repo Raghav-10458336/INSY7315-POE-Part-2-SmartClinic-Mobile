@@ -23,6 +23,12 @@ The mobile application complements the group's main SmartClinic website while op
 
 The following demonstration and presentation videos form part of the final project submission.
 
+**Main Web App Github Repo Link:**  
+https://github.com/shahaanp19/Smart-Clinic.git
+
+**Companion Mobile App Github Repo Link:**  
+https://github.com/Raghav-10458336/INSY7315-POE-Part-2-SmartClinic-Mobile
+
 **Main Website YouTube Video:**  
 _To be added_
 
@@ -30,7 +36,7 @@ _To be added_
 https://youtu.be/K_AnSycwy0M
 
 **Group Presentation YouTube Video:**  
-_To be added_
+https://youtu.be/VMjPiho9LpU
 
 ---
 
