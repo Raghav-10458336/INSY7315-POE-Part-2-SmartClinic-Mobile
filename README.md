@@ -30,7 +30,7 @@ https://github.com/shahaanp19/Smart-Clinic.git
 https://github.com/Raghav-10458336/INSY7315-POE-Part-2-SmartClinic-Mobile
 
 **Main Website YouTube Video:**  
-_To be added_
+https://youtu.be/gdB0o8uHFA0?si=mTg5zJKxtoXUiRRI
 
 **Mobile App YouTube Video:**  
 https://youtu.be/K_AnSycwy0M
